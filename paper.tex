@@ -595,20 +595,20 @@ Similar formulas are used for the $y$ component.
 \section{The conservative transport equation on the cubed-sphere}
 \label{adv-2d}
 The goal of this section is to present and solve numerically the conservative transport equation on the cubed-sphere. 
-We are going to consider the equi-edge or equiangular cubed-sphere mappings $\Psi_p$ and its local coordinates $(x,y)$.
+We are going to consider the equi-edge or equiangular cubed-sphere mappings $\Psi_p$ and their respective local coordinates $(x,y)$.
 \textcolor{red}{Once again, the metric term is denoted by $\sqrt{\mathfrak{g}}_{\Psi}$ by $\sqrt{\mathfrak{g}}$ for simplicity.}
 Following \cite{nair:2010}, the transport model without sources or sinks is considered:
 \begin{align}
 	\label{transp-rho}
 	[\partial_t \rho + \nabla \cdot (\rho \boldsymbol{u})](x,y,p,t)&=0,\\
 	\label{transp-phi}
-	[\partial_t (\rho \phi) + \nabla \cdot (\rho \phi \boldsymbol{u})](x,y,p,t)&=0,\
+	[\partial_t (\rho \phi) + \nabla \cdot (\rho \phi \boldsymbol{u})](x,y,p,t)&=0,
 \end{align}
 for $x,y\in[-a,a]$, $t \in [0,T]$, where $T$ is the final time,
 \textcolor{red}
 {$\boldsymbol{u}$ is the wind, $\mathfrak{u}$ and $\mathfrak{v}$ are the contravariant wind components (Equation \ref{contravariant-wind}),
 $\rho$ is the fluid density and $\phi$ is the tracer concentration}.
-Additionally, for the transport model, it is assumed that the initial conditions are given as $\rho(x,y,p,0)=\rho_0(x,y,p)$ and $\phi(x,y,p,0)=\phi_0(x,y,p)$, given $\rho_0$ and $\phi_0$, and that the boundary conditions are related to the cubed-sphere topology.
+Additionally, for the transport model, it is assumed that the initial conditions are given as $\rho(x,y,p,0)=\rho_0(x,y,p)$ and $\phi(x,y,p,0)=\phi_0(x,y,p)$, given $\rho_0$ and $\phi_0$. % and that the boundary conditions are related to the cubed-sphere topology.
 Equation \eqref{transp-rho} is the continuity equation and Equation \eqref{transp-phi} is the conservative advection equation.
 In this framework, $\rho \phi$ represents the tracer density, and the total masses of $\rho$ and $\rho \phi$ are preserved.  Therefore, these quantities are referred to as conserved quantities.
 
@@ -657,7 +657,7 @@ $N+2\nu$ one-dimensional conservative transport equations in the $y$-direction
 \end{equation}
 for $i=-\nu+1, \ldots, N + \nu$, using $q_{ij}^n$ as initial data.
 Therefore, the solution to the 1D conservative transport equation needs to be specified.
-The finite-volume approach is going to be used to solve Equations \ref{1d-adv-xdir} and \ref{1d-adv-ydir}, as described in the next subsection.
+A finite-volume approach is going to be used to solve Equations \eqref{1d-adv-xdir} and \eqref{1d-adv-ydir}, as described in the next subsection.
 
 \textcolor{red}
 {
@@ -683,16 +683,15 @@ For each $j=-\nu+1, \cdots, N+\nu$ fixed, the following linear conservative tran
 \end{equation}
 where the notation abuses $\sqrt{\mathfrak{g}}(x) = \sqrt{\mathfrak{g}}(x,y_j)$ and $\mathfrak{u}(x,t) = \mathfrak{u}(x,y_j,t)$ are being used, along with the notations $\sqrt{\mathfrak{g}}_i = \sqrt{\mathfrak{g}}(x_i,y_j)$ and ${\mathfrak{u}}_{i+\frac{1}{2}}^n = {\mathfrak{u}}(x_{i+\frac{1}{2}},y_j,t^n)$.
 Furthermore, the dependence on $j$ is omitted to ease notation.
-The boundary conditions are assumed to be related to the cubed-sphere topology.
 The average values in the $x$ direction for the $i$-th cell are defined as:
 \begin{equation}
 	\label{1d-average-def}
 	\overline{(\sqrt{\mathfrak{g}}q)}_{i}(t) = \frac{1}{\Delta x} \int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}} {(\sqrt{\mathfrak{g}}q)}(x,t) \,dx.
 \end{equation}
-Following the finite-volume approach \cite{leveque:1990},
+Following the finite-volume approach as in \cite{leveque:1990},
 Equation \eqref{1d-avd-eq} is integrated in space on 
 $[x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$
-followed by an integration in time on $[t^{n},t^{n+1}]$, leading to the integral version of the conservative transport equation
+followed by an integration in time on $[t^{n},t^{n+1}]$, leading to the integral version of the \textcolor{red}{conservative transport equation}:
 \begin{equation}
 	\label{1d-adv-integral}
 	\overline{(\sqrt{\mathfrak{g}}q)}_i(t^{n+1}) =  \overline{(\sqrt{\mathfrak{g}}q)}_i(t^{n}) -
@@ -708,8 +707,7 @@ Equation \eqref{1d-adv-integral} needs to approximate the time-averaged flux at 
 to derive a finite-volume scheme. This flux, in principle, requires knowledge of $q$ over the entire interval $[t^n, t^{n+1}]$. 
 To overcome this, the temporal integral is expressed as a spatial integral at time $t^n$. 
 This approach avoids the need for information about $q$ throughout the entire interval $[t^n, t^{n+1}]$. 
-Furthermore, this spatial integral domain is closely related to the definition of the 
-departure point. 
+Furthermore, this spatial integral domain is closely related to the definition of the departure point. 
 
 To introduce the definition of departure point, for each $s \in [t^n,t^{n+1}]$,
 the following Cauchy problem backward in time is introduced:
@@ -730,10 +728,10 @@ In Theorem \ref{flux-theorem} from \ref{app-flux}, it is shown that:
 \end{equation}
 Therefore, replacing Equation \eqref{1d-avflux-eq1} in Equation \eqref{1d-adv-integral},
 it is clear that at each time step, the values of $\overline{(\mathfrak{\sqrt{g}}q)}_{i}(t^{n+1})$ are computed based on $\overline{(\mathfrak{\sqrt{g}}q)}_{i}(t^{n})$  and the integrals 
-of ${(\mathfrak{\sqrt{g}}q)}_{i}(x,t^n)$ over specific intervals that are defined by the departure points.
+of ${(\mathfrak{\sqrt{g}}q)}(x,t^n)$ over specific intervals that are defined by the departure points.
 To perform these computations, the departure points from the edges of all control volumes are needed to calculate the required integrals.
 This idea serves as the motivation for defining finite-volume Semi-Lagrangian schemes, also known as flux-form Semi-Lagrangian schemes, as explored by \cite{lin:1996}.
-These schemes involve estimating the departure points and reconstructing the function $q$ at time $t^n$ using its average values $\overline{q}_{i}(t^n)$, which enables the computation of the necessary integrals.
+These schemes involve estimating the departure points and reconstructing the function ${\mathfrak{\sqrt{g}}q}$ at time $t^n$ using their average values $\overline{(\mathfrak{\sqrt{g}}q)}_{i}(t^n)$, which enables the computation of the necessary integrals.
 Therefore, this serves as motivation to look for a scheme of the form:
 \begin{equation}
 	\label{fv-scheme}
@@ -750,7 +748,8 @@ where
 	 (\widetilde{\sqrt{\mathfrak{g}}{q}})(x, t^n) \,dx,
 \end{equation} 
 is the numerical flux, where $\widetilde{(\sqrt{\mathfrak{g}}{q})}$ is a subgrid reconstruction function of $\sqrt{\mathfrak{g}}{q}$ using the average values $\overline{(\sqrt{\mathfrak{g}}q)}^{n}_{i}$ and $\tilde{x}_{i+\frac{1}{2}}^n$, which is the estimated departure point obtained by solving numerically Equation \eqref{1d-dp-equation}.
-Since the Courant-Friedrichs-Lewy (CFL) condition is assumed in this work, this integral shall be constrained to a single cell, namely $[x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ or $[x_{i+\frac{1}{2}},x_{i+\frac{3}{2}}]$.
+Since the Courant-Friedrichs-Lewy (CFL) condition is assumed in this work, this integral shall be constrained to a single cell, namely $[x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ or $[x_{i+\frac{1}{2}},x_{i+\frac{3}{2}}]$\textcolor{red}{, as will be discussed in detail in Section \ref{timeav-cfl}.
+This scheme allows for the use of large time steps, as discussed in \cite{lin:1996,chen:2017}, but it is not considered in this work, since the FV3 discretization assumes the CFL condition.}
 
 In practice, the scheme from Equation \eqref{fv-scheme} is replaced by using the midpoint rule for integration, that is $\overline{(\sqrt{\mathfrak{g}}q)}_{i}^n \approx q_{i}^n\sqrt{\mathfrak{g}}_{i}$, and therefore the scheme becomes a method to update cell center values, namely:
 \begin{equation}
@@ -784,15 +783,19 @@ which leads to a first-order accurate scheme in time.
 
 To achieve second-order accuracy in time, a second-order Runge-Kutta (RK2) method may be employed to integrate Equation \eqref{1d-dp-equation}. Following \cite{durran:2010}, this scheme results in:
 \begin{equation}
+	\label{rk2-wind}
 	\tilde{\mathfrak{u}}^{LT2}_{i+\frac{1}{2}} =
 	\begin{cases}
 		\big(1-\alpha_{i+\frac{1}{2}}^n \big)\mathfrak{\mathfrak{u}}^{n+\frac{1}{2}}_{i+\frac{1}{2}} +
 		\alpha_{i+\frac{1}{2}}^n \mathfrak{u}^{n+\frac{1}{2}}_{i-\frac{1}{2}} & \text{if } {\mathfrak{u}}^n_{i+\frac{1}{2}}\geq 0,\\
-		\alpha_{i+\frac{1}{2}}^n \mathfrak{u}^{n+\frac{1}{2}}_{i+\frac{3}{2}} + \big(1-\alpha_{i+\frac{1}{2}}^n\big)
+		-\alpha_{i+\frac{1}{2}}^n \mathfrak{u}^{n+\frac{1}{2}}_{i+\frac{3}{2}} + \big(1+\alpha_{i+\frac{1}{2}}^n\big)
 		\mathfrak{u}^{n+\frac{1}{2}}_{i+\frac{1}{2}} & \text{if } {\mathfrak{u}}^n_{i+\frac{1}{2}} < 0,\
 	\end{cases}
 \end{equation}
-where $$\alpha_{i+\frac{1}{2}}^n = \frac{\mathfrak{u}_{i+\frac{1}{2}}^n\Delta t}{2\Delta x},$$ which requires the CFL condition assumption.
+where $$\alpha_{i+\frac{1}{2}}^n =  \frac{\mathfrak{u}_{i+\frac{1}{2}}^n\Delta t}{2\Delta x}.$$
+\textcolor{red}{
+Notice that, in order for the linear interpolation of Equation \eqref{rk2-wind} to make sense, it is necessary to ensure that $|\alpha_{i+\frac{1}{2}}^n| \in [0,1]$. 
+This requirement is particularly fulfilled when the CFL number is less than one, as discussed in Section \ref{timeav-cfl}.}
 The LT2 scheme requires the wind at two time levels, while FV3 uses only one time level. 
 Since this work performs simulations with prescribed winds, it is  assumed that the wind is known at time levels $n$ and $n+\frac{1}{2}$.
 However, in the FV3 shallow-water solver, the C-grid step first takes the D-grid wind and convert it to a C-grid wind at time level $n$, and then the  C-grid wind at the time level $n+\frac{1}{2}$ is computed.
@@ -800,7 +803,8 @@ Therefore, considering the horizontal solver, the LT2 scheme will use informatio
 
 \subsection{The time-averaged and upwind CFL number}
 \label{timeav-cfl}
-In order to compute the integral in Equation \eqref{numerical-flux}, it shall be useful to introduce the time-averaged CFL, as this integral in FV3 is expressed in terms of the CFL number at the edges.
+In order to compute the integral in Equation \eqref{numerical-flux}, it will be useful to introduce the time-averaged CFL number at the edges.
+This integral in FV3 is expressed in terms of this number.
 For the LT2 scheme, the CFL number at the edges is defined naturally as
 \begin{align}
 	\label{cfl_LT2}
@@ -862,26 +866,35 @@ We introduce the grid function $q^M$ expressed as:
 		\quad &\text{if }{M=\text{LT2}}.
 	\end{cases}
 \end{align}
-Following \cite{harris:2021}, the PPM reconstruction on the $i$-th cell for a grid function $q^M$ may be expressed as:
+Following \cite{harris:2021}, the PPM reconstruction on the $i$-th cell for a grid function $q^M$ may be expressed as: \textcolor{red}{
 \begin{align}
-	&\widetilde{q^M}(x) =
-	\widetilde{q^M_i}(x) =  \nonumber \\
 	\label{ppm-formula}
-	&q_{L,i}^M -
-	(4b_{L,i}^M +2b_{R,i}^M )
+	\widetilde{q^M}(x) =
+	\widetilde{q^M_i}(x) =
+	a_1+ a_2
 	\bigg(\frac{x-x_{i-\frac{1}{2}}}{\Delta x}\bigg)+
-	3(b_{L,i}^M +b_{R,i}^M )
-	\bigg(\frac{x-x_{i-\frac{1}{2}}}{\Delta x}\bigg)^2
+	a_3
+	\bigg(\frac{x-x_{i-\frac{1}{2}}}{\Delta x}\bigg)^2,
 \end{align}
 for $x \in [x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$, where
+\begin{align}
+	a_1 = q_{L,i}^M , \quad
+	a_2 = 4b_{L,i}^M +2b_{R,i}^M, \quad
+	a_3 = 3(b_{L,i}^M +b_{R,i}^M ) , 
+\end{align}
+where the following perturbation values of  ${q_i^M}$ named by \cite{harris:2021} are introduced
 \begin{align}
 	b_{L,i}^M = q_{L,i}^M-{q_i^M}, \quad 
 	b_{R,i}^M = q_{R,i}^M-{q_i^M},
 \end{align}
-are called perturbation values and ${q_i^M}$
+and ${q_i^M}$
 are the average or centroid values at the $i$-th cell.
-It is easy to see that integrating Equation \eqref{ppm-formula} on $x \in [x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ gives $q^M_i\Delta x$, therefore the PPM reconstructions preserves the mass on each cell.
-The values $q_{L,i}^M$ and $q_{R,i}^M$ should approximate ${q_{i-\frac{1}{2}}^M}$ and ${q_{i+\frac{1}{2}}^M}$, respectively.
+It is easy to see that integrating Equation \eqref{ppm-formula} on $x \in [x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ gives $q^M_i\Delta x$, therefore the PPM reconstructions preserves the mass on each cell. It is also easy to see that:
+\begin{align}
+	\lim_{x \to x_{i-\frac{1}{2}}}{q^M_i}(x) = q_{L,i}^M,\quad
+	\lim_{x \to x_{i+\frac{1}{2}}}{q^M_i}(x) = q_{R,i}^M.
+\end{align}
+Therefore, the values $q_{L,i}^M$ and $q_{R,i}^M$ should approximate ${q_{i-\frac{1}{2}}^M}$ and ${q_{i+\frac{1}{2}}^M}$, respectively.}
 Furthermore, we consider:
 \begin{align}
 	\label{phi_L}
@@ -1477,7 +1490,7 @@ This discrepancy arises because the FV3 splitting is designed for divergence-fre
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Concluding remarks}
 \label{conclusion}
-\textcolor{red}{This work has revisited the FV3 transport scheme in all its details}. This thorough examination has allowed for proposed modifications to improve the accuracy of the FV3 advection scheme, leading to a new scheme named LT2.
+\textcolor{red}{This work has revisited the FV3 transport scheme in all its details}. This thorough examination has allowed for proposed modifications to improve the accuracy of the FV3 advection scheme, leading to a proposed scheme named LT2.
 
 The FV3 transport scheme relies on applying 1D finite-volume fluxes, namely the PPM, using a direction-splitting strategy.
 \textcolor{red}{The proposed modifications to the 1D scheme aim to allow a more accurate treatment in handling metric terms and computing the departure points.}
@@ -1494,9 +1507,11 @@ In this case, FV3 is only first order, while LT2 is second-order. Even with a li
 This was demonstrated consistently throughout the simulations.
 Therefore, the major conclusion here is that the LT2 scheme is more accurate regardless of whether the wind is divergence-free or not, while FV3 is only accurate for divergence-free winds.
 
-Furthermore, during the advection a Gaussian hill through a rotated zonal wind, both FV3 and LT2 schemes exhibited small spikes in errors whenever the Gaussian hill passed over a corner. 
-Overall, the LT2 scheme showed slightly smaller errors in this test.
-Additionally, \textcolor{red}{it was} observed that the equi-edge grid generally exhibited smaller errors compared to the equiangular grid for all simulations, with the LT2 scheme demonstrating good results in both grids.
+%Furthermore, during the advection a Gaussian hill through a rotated zonal wind, both FV3 and LT2 schemes exhibited small spikes in errors whenever the Gaussian hill passed over a corner. 
+%Overall, the LT2 scheme showed slightly smaller errors in this test.
+%Additionally, \textcolor{red}{it was} observed that the equi-edge grid generally exhibited smaller errors compared to the equiangular grid for all simulations, with the LT2 scheme demonstrating good results in both grids.
+
+
 
 \textcolor{red}{
 Although this paper has considered the transport model, the ultimate goal is to use the LT2 scheme within the full three-dimensional non-hydrostatic solver. 
@@ -1505,20 +1520,18 @@ In particular, the LT2 scheme may be used to compute the fluid depth and the abs
 \textcolor{red}{
 It is anticipated that shallow-water numerical experiments were also conducted using both the FV3 and LT2 schemes, along with the test cases from \cite{will:1992} and \cite{galewsky:2004}. It was observed that the LT2 scheme did not deteriorate the accuracy of the shallow-water solver. 
 Both schemes showed very similar results for these shallow-water tests.
-This is expected, as most of the shallow-water tests have small or no wind divergence.
+This is expected, as most of the shallow-water tests available on the literature have small or no wind divergence.
 We are currently working on developing a test for the shallow-water equations where divergence plays a key role in the solution dynamics to test the LT2 and FV3 schemes in this case.
-In this scenario, it is expected that the LT2 scheme should introduce a more accurate solution.
-}
+In this scenario, it is expected that the LT2 scheme should introduce a more accurate solution.}
 
 \textcolor{red}{
-Another possibility to explore the LT2 scheme is to consider hurricanes and tropical cyclones \cite{holton:2012}, where wind divergence plays a key role.
-In fact, these phenomena are fueled by strong horizontal
-wind convergence at the Earth’s surface, with strong horizontal wind divergence occurring at high altitudes. 
-A study based on \cite{gao:2021} could be performed, where the impact of using different 1D PPM schemes of FV3 on hurricane intensity prediction is investigated.
-This study highlights how modifying the advection scheme may improve
-hurricane intensity prediction and affect the eyewall convection location. 
-Therefore, the LT2 transport scheme could be used in these simulations to observe its effect on hurricane intensity prediction.
+Horizontal wind divergence plays a pivotal role in many phenomena on the atmosphere such as in tropical cyclones, hurricanes and in the Intertropical Convergence Zone \cite{holton:2012}.
+For example, hurricanes are fueled by strong horizontal wind convergence at the Earth’s surface, with strong horizontal wind divergence occurring at high altitudes.
+Therefore, we expect that the LT2 scheme has the potential to improve the forecast of these phenomena where wind divergence is present.
+For example, LT2 scheme may be used to conduct a study based on \cite{gao:2021}, where the impact of using different 1D PPM schemes of FV3 on hurricane intensity prediction is investigated. 
+This study highlights how modifying the advection scheme may improve hurricane intensity prediction and affect the eyewall convection location.
 }
+
 
 
 \section*{CRediT authorship contribution statement}
@@ -1530,8 +1543,7 @@ The authors declare that they have no known competing financial interests or per
 \section*{Data availability}
 The source code used in this work is available at \url{https://github.com/luanfs/FV3_container}.
 This code was executed using Docker, utilizing the containerized
-version of the SHiELD model developed by \cite{cheng:2022},
-\textcolor{red}{along with the ghost cell interpolation implemented by \cite{mouallem:2023}}.
+version of the SHiELD model developed by \cite{cheng:2022}.
 
 \section*{Acknowledgments}
 We acknowledge the financial support provided by the São Paulo Research Foundation (FAPESP) under the grants 2020/10280-4 and 2021/06176-0.
