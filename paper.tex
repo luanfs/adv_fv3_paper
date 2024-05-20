@@ -137,8 +137,10 @@ To be written.
 
 %%Research highlights
 \begin{highlights}
-\item To be written.
-\item To be written.
+\item The transport scheme employed in the United States' Global Forecast System is revisited.
+\item Numerical simulations show that this scheme has reduced accuracy for divergent winds.
+\item  An alternative scheme is proposed, which is much more accurate for divergent winds than the revisited scheme.
+\item The proposed scheme adds only a slight increase in computational effort.
 \end{highlights}
 
 %% Keywords
@@ -209,7 +211,7 @@ The extra cost is mainly due to the second-order departure point computation, wh
 
 This work is outlined as follows:
 in Section \ref{cs-grids}, we present the cubed-sphere grids, revisiting both the equiangular and equi-edge grids, and also discuss the treatment of ghost cells, providing all the tools we shall need during this work.
-In Section \ref{adv-2d}, we revisited the FV3 transport scheme on the cubed-sphere and we propose the new scheme.
+In Section \ref{adv-2d}, we revisited the FV3 transport scheme on the cubed-sphere and we introduce the new proposed scheme.
 In Section \ref{num-exp}, we present numerical simulations comparing the proposed scheme with the current FV3 transport scheme. 
 Final thoughts are presented in Section \ref{conclusion}.
 
@@ -255,8 +257,8 @@ These mappings are defined individually for each of the 6 cube faces, also calle
 The idea behind this mapping is illustrated in Figure \ref{sph-cube-equidist}, where the coordinates $(X,Y)$ are thought to live on the cube faces.
 Figure \ref{sph-cube-equidist} shows how the grid points are equally spaced on the cube and then projected onto the sphere, hence the name equidistant.
 Note that there are other ways to arrange the coordinates over the panels.
-Each one defines an interlock pattern, as discussed by \cite[Section 2.1]{chen:2021}.
-The arrangement presented here is known as the staircase arrangement \textcolor{red}{(see Figure 2 in \cite{chen:2021})}, which is used in FV3 and provides some advantages for exchanging information between panels.
+Each one defines a \textcolor{red}{connectivity pattern} between the panels, as discussed by \cite[Section 2.1]{chen:2021}.
+The \textcolor{red}{connectivity pattern} presented here is known as the staircase arrangement \textcolor{red}{(see Figure 2 in \cite{chen:2021})}, which is used in FV3 and provides some advantages for exchanging information between panels.
 \begin{figure}[!htb]
 	\centering
 	\begin{subfigure}{0.45\textwidth}
@@ -777,7 +779,7 @@ Therefore, the estimated departure point, denoted by $\tilde{x}_{i+\frac{1}{2}}^
 	\tilde{x}_{i+\frac{1}{2}}^n = x_{i+\frac{1}{2}} - {\tilde{\mathfrak{u}}}^{M}_{i+\frac{1}{2}}\Delta t,
 \end{equation}
 where $M$ stands for the employed method.
-When the FV3 method is used, $M=\text{FV3}$; when the new scheme is used, $M=\text{LT2}$. This notation shall be used for the remainder of this work.
+When the FV3 method is used, $M=\text{FV3}$; when the proposed scheme is used, $M=\text{LT2}$. This notation shall be used for the remainder of this work.
 
 One possible way to estimate the departure point, which is used in FV3, is:
 \begin{equation}
