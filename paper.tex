@@ -450,29 +450,30 @@ and the up-down edge points  $\Psi_{i,j+\frac{1}{2}}$ are also  given by the ave
 It is easy to see that generating the grid points using these averages has an $\mathcal{O}(\Delta x^2)$ difference compared to generating these points using a cubed-sphere mapping ${\Psi}_p$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textcolor{red}{
 The following geodesic distances in $x$ and $y$ directions, respectively, are introduced:
 \begin{align}
 	\label{distcube}
-	{\delta} x_{ij} = d(\Psi_{i+\frac{1}{2},j},\Psi_{i-\frac{1}{2},j}) , \quad
-	{\delta} y_{ij} = d(\Psi_{i,j+\frac{1}{2}},\Psi_{i,j-\frac{1}{2}}),
+	\widehat{d^x_{ij}} = d(\Psi_{i+\frac{1}{2},j},\Psi_{i-\frac{1}{2},j}) , \quad
+	\widehat{d^y_{ij}} = d(\Psi_{i,j+\frac{1}{2}},\Psi_{i,j-\frac{1}{2}}),
 \end{align}
-where $d(P,Q) = R\arccos{(\langle P, Q \rangle)}$, for $P,Q \in \mathbb{S}^2_R$.
+where $d(P,Q) = R\arccos{(\langle P, Q \rangle)}$, for $P,Q \in \mathbb{S}^2_R$.}
 These distances may be represented in terms of the tangent vector norms as:
 \begin{align}
-	{\delta} x_{ij} = 
+	\widehat{d^x_{ij}} = 
 	\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}}
 	\|\partial_x  {\Psi}_{p}\|(x,y_j) \,dx ,\quad
-	{\delta} y_{ij} =
+	\widehat{d^y_{ij}} =
 	\int_{y_{j-\frac{1}{2}}}^{y_{j+\frac{1}{2}}}
 	\|\partial_y {\Psi}_{p}\|(x_i,y) \,dy.
 \end{align}
 Hence, their midpoint approximations are defined as:
 \begin{align}
 	\label{distcube2}
-	\hat{\delta} x_{ij} = \|\partial_x {\Psi}_{p}(x_i,y_j)  \|\Delta x,\quad
-	\hat{\delta} y_{ij} = \|\partial_y {\Psi}_{p}(x_i,y_j) \|\Delta y.
+	{d^x_{ij}} = \|\partial_x {\Psi}_{p}(x_i,y_j)  \|\Delta x,\quad
+	{d^y_{ij}} = \|\partial_y {\Psi}_{p}(x_i,y_j) \|\Delta y.
 \end{align}
-We point out that $\hat{\delta} x_{ij}$ and $\hat{\delta} y_{ij}$ are replaced in FV3 code by the geodesic distances that they approximate whenever they appear, which are second-order accurate by the midpoint rule.
+We point out that ${d^x_{ij}}$ and ${d^y_{ij}}$ are replaced in FV3 code by the geodesic distances that they approximate whenever they appear, which are second-order accurate by the midpoint rule.
 A control volume of the cubed-sphere is denoted by $\Omega_{ijp}$, defined as $\Omega_{ijp} = {\Psi}_p(\Omega_{ij})$.
 The area of $\Omega_{ijp}$ is denoted by $|\Omega_{ij}|$,
 since the area does not depend on the panel due to the grid symmetry.
@@ -809,7 +810,8 @@ For the LT2 scheme, the CFL number at the edges is defined naturally as
 \begin{align}
 	\label{cfl_LT2}
 	\tilde{c}_{i+\frac{1}{2}}^{LT2} = {\mathfrak{\tilde{u}}}_{i+\frac{1}{2}}^{LT2}\frac{\Delta t}{\Delta x}
-	= {\tilde{u}}_{i+\frac{1}{2}}^{LT2}\frac{\Delta t}{\hat{\delta} x_{i+\frac{1}{2}}},
+	= {\tilde{u}}_{i+\frac{1}{2}}^{LT2}\frac{\Delta t}
+	{{d^x_{i+\frac{1}{2}}}},
 \end{align}
 where ${\tilde{u}}_{i+\frac{1}{2}}^{LT2}$ is just a normalization of 
 ${\mathfrak{\tilde{u}}}_{i+\frac{1}{2}}^{LT2}$ (Equation \eqref{contra-uv}).
@@ -818,16 +820,16 @@ ${\mathfrak{\tilde{u}}}_{i+\frac{1}{2}}^{LT2}$ (Equation \eqref{contra-uv}).
 	\label{cfl_fv3}
 	{c}_{i+\frac{1}{2}}^{FV3}
     ={\tilde{u}}_{i+\frac{1}{2}}^{FV3}\frac{{\Delta t}}
-	{{\hat{\delta} x_{i+\frac{1}{2}}^*}},
+	{{{d^{x,*}_{i+\frac{1}{2}}}}},
 \end{align}
 where
 \begin{align}
 	\label{cfl_dp1-dx}
-	\hat{\delta} x_{i+\frac{1}{2}}^*  =
+    {{d^{x,*}_{i+\frac{1}{2}}}} = 
 	\begin{cases}
-		{\hat{\delta} x_{i}},
+		{{d^{x}_{i}}},
 		\quad &\text{if }{{{u}}_{i+\frac{1}{2}}^{FV3} \ge 0},\\
-		{\hat{\delta} x_{i+1}}, 
+		{{d^{x}_{i+1}}}, 
 		\quad &\text{if }{{{u}}_{i+\frac{1}{2}}^{FV3} < 0}.
 	\end{cases}
 \end{align}
@@ -991,13 +993,13 @@ Notice that by using Equation \eqref{mt-sina}, it follows that Equation \eqref{a
 \begin{align}
 	\label{ax-fv3}
 	\mathcal{A}_{i+\frac{1}{2}}^{FV3} = 
-\bigg( \frac{\hat{\delta} x_{i+\frac{1}{2}}}{\hat{\delta} x_{i+\frac{1}{2}}^*}\bigg)
+\bigg( \frac{{d}^x_{i+\frac{1}{2}}}{{d}^{x,*}_{i+\frac{1}{2}}}\bigg)
   		\Delta t
-		\hat{\delta} y_{i+\frac{1}{2}} 
+		d^y_{i+\frac{1}{2}} 
 		\sin{\alpha_{i+\frac{1}{2}}}
         {\tilde{u}}_{i+\frac{1}{2}}^{FV3},
 \end{align}
-and recalling the definition of ${\hat{\delta} x_{i+\frac{1}{2}}^*}$ in Equation \eqref{cfl_dp1-dx}.
+and recalling the definition of ${{d}^{x,*}_{i+\frac{1}{2}}}$ in Equation \eqref{cfl_dp1-dx}.
 In the current FV3 code, the term within parentheses \eqref{ax-fv3} is ignored and assumed to be equal to one.
 Notice that if the scalar field $q^n$ is constant equal to $Q$, the following property holds:
 \begin{align}
@@ -1531,7 +1533,6 @@ Therefore, we expect that the LT2 scheme has the potential to improve the foreca
 For example, LT2 scheme may be used to conduct a study based on \cite{gao:2021}, where the impact of using different 1D PPM schemes of FV3 on hurricane intensity prediction is investigated. 
 This study highlights how modifying the advection scheme may improve hurricane intensity prediction and affect the eyewall convection location.
 }
-
 
 
 \section*{CRediT authorship contribution statement}
