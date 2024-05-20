@@ -190,7 +190,8 @@ Thus, the transport scheme assumes a critical role in shaping the horizontal dyn
 
 The transport scheme employed in FV3 extends the method introduced by \cite{lin:1996} to the cubed-sphere, as proposed by \cite{putman:2007}. 
 \textcolor{red}{
-	The major challenge of transitioning from latitude-longitude grids to grids based on Platonic solids \cite{stan:2012} is grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}), and is highly undesirable due to its lack of physical meaning.}
+	The major challenge of transitioning from latitude-longitude grids to grids based on Platonic solids \cite{stan:2012} is grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}), and is highly undesirable due to its lack of physical meaning.
+GHOSTCELLS}
 
 This approach involves constructing a two-dimensional (2D) scheme by combining the solution of one-dimensional (1D) conservative transport equations using a direction-splitting strategy on each cube face.
 The 1D equations are solved using the finite-volume approach of the Piecewise Parabolic Method (PPM) \cite{colella:1984,carpenter:1990}. 
@@ -216,18 +217,18 @@ Final thoughts are presented in Section \ref{conclusion}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Cubed-sphere grids}
 \label{cs-grids}
-The goal of this section is to review the concept of cubed-sphere grids, particularly those available in FV3.
-To start with, we are going to present the mapping between the cube and the sphere introduced by \cite{sadourny:1972} in section \ref{cs-equidistant}, also known as the equidistant mapping.
+The goal of this Section is to briefly review the concept of cubed-sphere grids, particularly those available in FV3.
+To start with, we are going to present the mapping between the cube and the sphere introduced by \cite{sadourny:1972} in Section \ref{cs-equidistant}, also known as the equidistant mapping.
 Following that, we show that using a change of coordinates, we may use the equidistant mapping to create other mappings from the cube to the sphere.
-Namely, section \ref{cs-equiangular} introduces the equiangular mapping introduced by \cite{ronchi:1996}, and section \ref{cs-equiedge} introduces the equi-edge mapping introduced by \cite{chen:2021}. 
-In section \ref{cs-grid}, we demonstrate how these mappings are utilized to generate cubed-sphere grids. 
+Namely, Section \ref{cs-equiangular} introduces the equiangular mapping introduced by \cite{ronchi:1996}, and Section \ref{cs-equiedge} introduces the equi-edge mapping introduced by \cite{chen:2021}. 
+In Section \ref{cs-grid}, we demonstrate how these mappings are utilized to generate cubed-sphere grids. 
 We mainly introduce all the notations and tools that will be needed for the remainder of this work.
-Finally, in section \ref{cs-ghost}, we demonstrate how the ghost cells that we will need are generated.
+Finally, in Section \ref{cs-ghost}, we demonstrate how the ghost cells that we will need are generated.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Equidistant mapping}
 \label{cs-equidistant}
-The mapping introduced by \cite{sadourny:1972} between the cube and the sphere divides the sphere into six quadrilaterals, also called panels, and enables the tessellation of the sphere into smaller quadrilaterals for each panel.
+Considering a cube circumscribed on a sphere, \cite{sadourny:1972} introduces a mapping between the cube faces and the sphere, generating a spherical cube.
 This mapping is also called equidistant mapping and generates the equidistant grid.
 Given $R>0$, the sphere of radius $R$ 
 centered at the origin of  $\mathbb{R}^3$ is denoted as:
@@ -249,12 +250,13 @@ The equidistant mapping is a family of maps ${\Gamma}_{p}: [-1,1] \times [-1,1] 
 	\label{gamma_456}
 {\Gamma}_{3+k}(X,Y)&=-{\Gamma}_{k}(Y,X),\quad k=1,2,3.
 \end{align}
-These mappings allow for the coverage of the sphere and represent the relationship between the sphere and the cube.
+\textcolor{red}{
+These mappings are defined individually for each of the 6 cube faces, also called panels, denoted by $p$, and they allow for the coverage of the sphere.}
 The idea behind this mapping is illustrated in Figure \ref{sph-cube-equidist}, where the coordinates $(X,Y)$ are thought to live on the cube faces.
-Figure \ref{sph-cube-equidist} shows how the grid points on the sphere are equally spaced on the cube and then projected onto the sphere, hence the name equidistant.
+Figure \ref{sph-cube-equidist} shows how the grid points are equally spaced on the cube and then projected onto the sphere, hence the name equidistant.
 Note that there are other ways to arrange the coordinates over the panels.
 Each one defines an interlock pattern, as discussed by \cite[Section 2.1]{chen:2021}.
-The arrangement presented here is known as the staircase arrangement, which is used in FV3 and provides some advantages for exchanging information between panels.
+The arrangement presented here is known as the staircase arrangement \textcolor{red}{(see Figure 2 in \cite{chen:2021})}, which is used in FV3 and provides some advantages for exchanging information between panels.
 \begin{figure}[!htb]
 	\centering
 	\begin{subfigure}{0.45\textwidth}
@@ -282,9 +284,9 @@ The derivative of ${\Gamma}_p$ is a $3\times2$ matrix denoted by $d{\Gamma}_p$. 
 With the aid of the derivative,  a basis of tangent vectors $\{{\partial_X {\Gamma}_p, \partial_Y {\Gamma}_p}\}$ may be defined
 at each point on the sphere, where $\partial_X {\Gamma}_p$ is given by the first column of $d{\Gamma}_p$ 
 and $\partial_Y {\Gamma}_p$ is given by the second column of $d{\Gamma}_p$.
-Along with, the metric tensor is defined as
+Along side, the metric tensor is defined as
 $G_{{\Gamma}} := (d\Gamma_p)^T \cdot d\Gamma_p$.
-It is easy to see that the metric tensor does not depend on $p$.
+It is easy to see that the metric tensor does not depend on the panel $p$.
 The Jacobian of the metric tensor $G_{{\Gamma}}$ is then defined as $\sqrt{\mathfrak{g}_{{\Gamma}}} :=
 \sqrt{|\det{G_{{\Gamma}}}|}.$
 
@@ -362,7 +364,7 @@ The divergence operator shall be used in the transport model in Section \ref{adv
 \subsection{Equiangular mapping}
 \label{cs-equiangular}
 Another cubed-sphere mapping is the equiangular mapping, 
-introduced by \cite{ronchi:1996}, which leads to a more uniform grid.
+introduced by \cite{ronchi:1996}, which leads to a more uniform grid on the sphere.
 This mapping is obtained by considering $\beta(x) = \tan{x}$ and $a=\frac{\pi}{4}$.
 In this case, $\beta(x)$ represents the angular coordinates, and the cube-sphere is obtained by partitioning the angle between
 grid points equally, as illustrated in Figure \ref{sph-cube-equiangular}, hence the name equiangular.
@@ -380,8 +382,9 @@ Also, this mapping leads to more uniform grid cells after applying the grid stre
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cubed-sphere grid generation}
 \label{cs-grid}
-Let us fix two positive integers $N$ and $\nu$, where $N$ represents the number of cells in a direction and $\nu$ represents the number of ghost cell layers.
-The equiangular or equi-edge mapping, denoted by $\Psi_p$, introduced previously, is considered to generate the cubed-sphere grid.
+Let us fix two positive integers $N$ and $\nu$, where $N$ represents the number of cells in both the $x$ and $y$ directions, and $\nu$ represents the number of ghost cell layers. 
+The equiangular or equi-edge mappings, denoted by $\Psi_p$, introduced previously, are considered to generate the cubed-sphere grid.
+\textcolor{red}{The notation $\Psi_p$ is used for both equiangular and equi-edge mappings, as what will be discussed does not depend particularly on the mapping.}
 For simplicity, the metric term $\sqrt{\mathfrak{g}}_{\Psi}$ is denoted by $\sqrt{\mathfrak{g}}$.
 To generate the cubed-sphere grid, the domain $[-a,a]\times[-a,a]$ is discretized using uniformly spaced points.
 \begin{align}
@@ -420,7 +423,7 @@ The corner points are computed as:
 	\Psi_{i+\frac{1}{2},j+\frac{1}{2},p} := {\Psi}_p(x_{i+\frac{1}{2}},y_{j+\frac{1}{2}}),
 \end{equation}
 $i,j=0, \ldots, N$.
-To ease the notation hereafter, the dependence on $p$ is omitted because it does not interfere with what is going to be discussed in this section.
+To ease the notation hereafter, the dependence on $p$ is omitted because it does not interfere with what is going to be discussed in this Section.
 Figure \ref{cs-grids-N10} shows the obtained grid lines in for $N=10$.
 \begin{figure}[!htb]
 	\begin{subfigure}{0.42\textwidth}
@@ -596,7 +599,7 @@ Similar formulas are used for the $y$ component.
 
 \section{The conservative transport equation on the cubed-sphere}
 \label{adv-2d}
-The goal of this section is to present and solve numerically the conservative transport equation on the cubed-sphere. 
+The goal of this Section is to present and solve numerically the conservative transport equation on the cubed-sphere. 
 We are going to consider the equi-edge or equiangular cubed-sphere mappings $\Psi_p$ and their respective local coordinates $(x,y)$.
 \textcolor{red}{Once again, the metric term is denoted by $\sqrt{\mathfrak{g}}_{\Psi}$ by $\sqrt{\mathfrak{g}}$ for simplicity.}
 Following \cite{nair:2010}, the transport model without sources or sinks is considered:
@@ -1125,14 +1128,14 @@ As pointed out in Figure \ref{ltxdir}, both FV3 and LT2 schemes require C-grid c
 These values may be obtained similarly to the interpolation process described in Section \ref{cs-ghost}, but conversions from cube to latitude-longitude coordinates (\ref{ap-wind}) are needed to avoid the cubed-sphere discontinuity. The inverse transform is performed after the interpolation is done.
 This process's details are highlighted in \cite[Section 2.3]{mouallem:2023}.
 
-To concluded this section, the transport model described by Equations \eqref{transp-rho} and \eqref{transp-phi} may be solved using the scheme from Equation \eqref{tr-scheme}, applied considering $q^n=\rho^n$ and $q^n=(\rho \phi)^n$ simultaneously.
+To concluded this Section, the transport model described by Equations \eqref{transp-rho} and \eqref{transp-phi} may be solved using the scheme from Equation \eqref{tr-scheme}, applied considering $q^n=\rho^n$ and $q^n=(\rho \phi)^n$ simultaneously.
 In this framework, the tracer concentration is given by $\phi^n = \frac{(\rho \phi)^n}{\rho^n}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Numerical experiments}
 \label{num-exp}
 \textcolor{red}{
-In this section, the goal is to present simulations of the numerical solution of the transport model, governed by Equations \eqref{transp-rho} and \eqref{transp-phi}, utilizing the FV3 and LT2 schemes. As mentioned earlier, the tracer concentration $\phi$ is advected in the transport model.}
+In this Section, the goal is to present simulations of the numerical solution of the transport model, governed by Equations \eqref{transp-rho} and \eqref{transp-phi}, utilizing the FV3 and LT2 schemes. As mentioned earlier, the tracer concentration $\phi$ is advected in the transport model.}
 To specify the simulation, including the initial condition for the tracer concentration $\phi_0$, the zonal wind component  denoted by $u_\lambda$, and the meridional wind component denoted by $v_\theta$, need to be defined.
 The conversion from these wind components to cubed-sphere contravariant wind components (Equation \eqref{contravariant-wind}) is detailed in \ref{ap-wind}.
 
@@ -1167,7 +1170,7 @@ The order of convergence is computed as
 \end{equation}}
 
 \subsection{Rotated zonal wind experiments}
-In this section, the following rotated zonal wind field based on \cite{will:1992} is considered:
+In this Section, the following rotated zonal wind field based on \cite{will:1992} is considered:
 \begin{align}
 	\label{zonal-wind}
 	\begin{cases}
