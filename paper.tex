@@ -189,11 +189,13 @@ Consequently, this method relies entirely on transport finite-volume fluxes.
 Thus, the transport scheme assumes a critical role in shaping the horizontal dynamics of FV3, beyond its traditional function in the dynamical core, as observed in tracer transport \cite{will:2007}.
 
 The transport scheme employed in FV3 extends the method introduced by \cite{lin:1996} to the cubed-sphere, as proposed by \cite{putman:2007}. 
+\textcolor{red}{
+	The major challenge of transitioning from latitude-longitude grids to grids based on Platonic solids \cite{stan:2012} is grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}), and is highly undesirable due to its lack of physical meaning.}
+
 This approach involves constructing a two-dimensional (2D) scheme by combining the solution of one-dimensional (1D) conservative transport equations using a direction-splitting strategy on each cube face.
 The 1D equations are solved using the finite-volume approach of the Piecewise Parabolic Method (PPM) \cite{colella:1984,carpenter:1990}. 
 A notable feature of the scheme proposed by \cite{lin:1996} is its elimination of the splitting error under conditions where the initial transported scalar field density is constant and the wind is divergence-free. 
-This property is attained through modifications to the inner advection operators employed within the scheme.
-
+This property is attained through modifications to the inner advection operators employed within the scheme. 
 The goal of this study is to reassess and suggest enhancements for the current FV3 transport scheme originally developed by \cite{putman:2007}, given its pivotal role in the horizontal dynamics of FV3. 
 We demonstrate that the scheme proposed by \cite{putman:2007} assumes constant metric terms during the application of the PPM to each 1D flux integration domain and employs a first-order departure point calculation for the 1D fluxes.
 We propose the development of a scheme that incorporates a second-order departure point calculation for the 1D fluxes and eliminates the assumption of constant metric terms. 
@@ -368,9 +370,8 @@ grid points equally, as illustrated in Figure \ref{sph-cube-equiangular}, hence 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Equi-edge mapping}
 \label{cs-equiedge}
-Another cubed-sphere mapping is the equi-edge proposed by
-\cite{chen:2021} using $\beta(x) = \sqrt{2}\tan{x}$ and
-$a=\arcsin{\big(\frac{1}{\sqrt{3}}\big)}$.
+\textcolor{red}{
+Another cubed-sphere mapping is the equi-edge mapping, initially introduced by \cite{chen:2021}, which utilizes $\beta(x) = \sqrt{2}\tan{x}$ and $a=\arcsin{\big(\frac{1}{\sqrt{3}}\big)}$. It is worth noting that while this mapping technique had been used previously in FV3, it was not formally documented until the work \cite{chen:2021}.}
 The idea behind the equi-edge mapping lies in partitioning the edges of the spherical cube equally,
 and then generating the other cells, hence the name equi-edge.
 Also, this mapping leads to more uniform grid cells after applying the grid stretching option of FV3 \citep{harris:2016, chen:2021}.
@@ -454,26 +455,26 @@ It is easy to see that generating the grid points using these averages has an $\
 The following geodesic distances in $x$ and $y$ directions, respectively, are introduced:
 \begin{align}
 	\label{distcube}
-	\widehat{d^x_{ij}} = d(\Psi_{i+\frac{1}{2},j},\Psi_{i-\frac{1}{2},j}) , \quad
-	\widehat{d^y_{ij}} = d(\Psi_{i,j+\frac{1}{2}},\Psi_{i,j-\frac{1}{2}}),
+	\widehat{l^x_{ij}} = d(\Psi_{i+\frac{1}{2},j},\Psi_{i-\frac{1}{2},j}) , \quad
+	\widehat{l^y_{ij}} = d(\Psi_{i,j+\frac{1}{2}},\Psi_{i,j-\frac{1}{2}}),
 \end{align}
 where $d(P,Q) = R\arccos{(\langle P, Q \rangle)}$, for $P,Q \in \mathbb{S}^2_R$.}
 These distances may be represented in terms of the tangent vector norms as:
 \begin{align}
-	\widehat{d^x_{ij}} = 
+	\widehat{l^x_{ij}} = 
 	\int_{x_{i-\frac{1}{2}}}^{x_{i+\frac{1}{2}}}
 	\|\partial_x  {\Psi}_{p}\|(x,y_j) \,dx ,\quad
-	\widehat{d^y_{ij}} =
+	\widehat{l^y_{ij}} =
 	\int_{y_{j-\frac{1}{2}}}^{y_{j+\frac{1}{2}}}
 	\|\partial_y {\Psi}_{p}\|(x_i,y) \,dy.
 \end{align}
 Hence, their midpoint approximations are defined as:
 \begin{align}
 	\label{distcube2}
-	{d^x_{ij}} = \|\partial_x {\Psi}_{p}(x_i,y_j)  \|\Delta x,\quad
-	{d^y_{ij}} = \|\partial_y {\Psi}_{p}(x_i,y_j) \|\Delta y.
+	{l^x_{ij}} = \|\partial_x {\Psi}_{p}(x_i,y_j)  \|\Delta x,\quad
+	{l^y_{ij}} = \|\partial_y {\Psi}_{p}(x_i,y_j) \|\Delta y.
 \end{align}
-We point out that ${d^x_{ij}}$ and ${d^y_{ij}}$ are replaced in FV3 code by the geodesic distances that they approximate whenever they appear, which are second-order accurate by the midpoint rule.
+We point out that ${l^x_{ij}}$ and ${l^y_{ij}}$ are replaced in FV3 code by the geodesic distances that they approximate whenever they appear, which are second-order accurate by the midpoint rule.
 A control volume of the cubed-sphere is denoted by $\Omega_{ijp}$, defined as $\Omega_{ijp} = {\Psi}_p(\Omega_{ij})$.
 The area of $\Omega_{ijp}$ is denoted by $|\Omega_{ij}|$,
 since the area does not depend on the panel due to the grid symmetry.
@@ -522,7 +523,7 @@ where $k = 0,\ldots, 4$. These values of $N$ are considered in this work.
 It can be observed that in terms of length of the cells, the equi-edge grid is less uniform than the equiangular grid.
 Despite this, the equi-edge grid is the operational grid in some applications of FV3 \cite{harris:2021,chen:2021}, such as, for instance, 
 the Next Generation Global Prediction System (NGGPS) \cite{zhou:2019}, 
-because this grid is expected to produce less grid imprinting due to its greater uniformity near the cubed edges.
+because this grid is expected to produce less grid imprinting due to its greater uniformity near the original cube.
 
 \subsection{Ghost cells}
 \label{cs-ghost}
@@ -811,7 +812,7 @@ For the LT2 scheme, the CFL number at the edges is defined naturally as
 	\label{cfl_LT2}
 	\tilde{c}_{i+\frac{1}{2}}^{LT2} = {\mathfrak{\tilde{u}}}_{i+\frac{1}{2}}^{LT2}\frac{\Delta t}{\Delta x}
 	= {\tilde{u}}_{i+\frac{1}{2}}^{LT2}\frac{\Delta t}
-	{{d^x_{i+\frac{1}{2}}}},
+	{{l^x_{i+\frac{1}{2}}}},
 \end{align}
 where ${\tilde{u}}_{i+\frac{1}{2}}^{LT2}$ is just a normalization of 
 ${\mathfrak{\tilde{u}}}_{i+\frac{1}{2}}^{LT2}$ (Equation \eqref{contra-uv}).
@@ -820,16 +821,16 @@ ${\mathfrak{\tilde{u}}}_{i+\frac{1}{2}}^{LT2}$ (Equation \eqref{contra-uv}).
 	\label{cfl_fv3}
 	{c}_{i+\frac{1}{2}}^{FV3}
     ={\tilde{u}}_{i+\frac{1}{2}}^{FV3}\frac{{\Delta t}}
-	{{{d^{x,*}_{i+\frac{1}{2}}}}},
+	{{{l^{x,*}_{i+\frac{1}{2}}}}},
 \end{align}
 where
 \begin{align}
 	\label{cfl_dp1-dx}
-    {{d^{x,*}_{i+\frac{1}{2}}}} = 
+    {{l^{x,*}_{i+\frac{1}{2}}}} = 
 	\begin{cases}
-		{{d^{x}_{i}}},
+		{{l^{x}_{i}}},
 		\quad &\text{if }{{{u}}_{i+\frac{1}{2}}^{FV3} \ge 0},\\
-		{{d^{x}_{i+1}}}, 
+		{{l^{x}_{i+1}}}, 
 		\quad &\text{if }{{{u}}_{i+\frac{1}{2}}^{FV3} < 0}.
 	\end{cases}
 \end{align}
@@ -993,13 +994,13 @@ Notice that by using Equation \eqref{mt-sina}, it follows that Equation \eqref{a
 \begin{align}
 	\label{ax-fv3}
 	\mathcal{A}_{i+\frac{1}{2}}^{FV3} = 
-\bigg( \frac{{d}^x_{i+\frac{1}{2}}}{{d}^{x,*}_{i+\frac{1}{2}}}\bigg)
+\bigg( \frac{{l}^x_{i+\frac{1}{2}}}{{l}^{x,*}_{i+\frac{1}{2}}}\bigg)
   		\Delta t
-		d^y_{i+\frac{1}{2}} 
+		l^y_{i+\frac{1}{2}} 
 		\sin{\alpha_{i+\frac{1}{2}}}
         {\tilde{u}}_{i+\frac{1}{2}}^{FV3},
 \end{align}
-and recalling the definition of ${{d}^{x,*}_{i+\frac{1}{2}}}$ in Equation \eqref{cfl_dp1-dx}.
+and recalling the definition of ${{l}^{x,*}_{i+\frac{1}{2}}}$ in Equation \eqref{cfl_dp1-dx}.
 In the current FV3 code, the term within parentheses \eqref{ax-fv3} is ignored and assumed to be equal to one.
 Notice that if the scalar field $q^n$ is constant equal to $Q$, the following property holds:
 \begin{align}
