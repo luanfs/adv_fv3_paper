@@ -137,7 +137,7 @@ To be written.
 
 %%Research highlights
 \begin{highlights}
-\item The transport scheme employed in the United States' Global Forecast System is revisited.
+\item The transport scheme employed in the dynamical core of  United States' Global Forecast System is revisited.
 \item Numerical simulations show that this scheme has reduced accuracy for divergent winds.
 \item  An alternative scheme is proposed, which is much more accurate for divergent winds than the revisited scheme.
 \item The proposed scheme adds only a slight increase in computational effort.
@@ -183,25 +183,32 @@ Consequently, the SWEs solver assume a pivotal role within the FV3 non-hydrostat
 On the other hand, within FV3, the solution to the SWEs is derived using the method proposed by \cite{lin:1997} extended to the cubed-sphere grid.
 This approach takes into account the SWEs in their vector invariant form, along with the C and D-grids introduced by \cite{arakawa:1977}.
 A major feature of this scheme is that the computation of fluid pressure, absolute vorticity, and kinetic energy fluxes is carried out using only transport finite-volume fluxes. 
-
-Furthermore, the method of  \cite{lin:1997} involves initially solving the SWEs for a half time-step to acquire C-grid covariant wind components, 
-which are then utilized to advance the D-grid covariant wind components for a full time step. 
-The C-grid half-step makes use of computationally inexpensive upwind flux operators, while the D-grid incorporates the FV3 transport scheme fluxes proposed by \cite{lin:1996,putman:2007}.
-Consequently, this method relies entirely on transport finite-volume fluxes. 
 Thus, the transport scheme assumes a critical role in shaping the horizontal dynamics of FV3, beyond its traditional function in the dynamical core, as observed in tracer transport \cite{will:2007}.
 
-The transport scheme employed in FV3 extends the method introduced by \cite{lin:1996} to the cubed-sphere, as proposed by \cite{putman:2007}. 
-\textcolor{red}{
-	The major challenge of transitioning from latitude-longitude grids to grids based on Platonic solids \cite{stan:2012} is grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}), and is highly undesirable due to its lack of physical meaning.
-GHOSTCELLS}
+%Furthermore, the method of  \cite{lin:1997} involves initially solving the SWEs for a half time-step to acquire C-grid covariant wind components, 
+%which are then utilized to advance the D-grid covariant wind components for a full time step. 
+%The C-grid half-step makes use of computationally inexpensive upwind flux operators, while the D-grid incorporates the FV3 transport scheme fluxes proposed by \cite{lin:1996,putman:2007}.
+%Consequently, this method relies entirely on transport finite-volume fluxes. 
 
-This approach involves constructing a two-dimensional (2D) scheme by combining the solution of one-dimensional (1D) conservative transport equations using a direction-splitting strategy on each cube face.
+\textcolor{red}{
+The transport scheme employed in FV3, proposed by \cite{putman:2007}, extends the method introduced by \cite{lin:1996}, moving from latitude-longitude grids to cubed-sphere grids, aiming for better performance on massive parallel supercomputers, which is difficult to achieve on latitude-longitude grids due to the pole problem \cite{will:2007,stan:2012}.
+Cubed-sphere grids were originally proposed by \cite{sadourny:1972} and revisited by \cite{rancic:1996,ronchi:1996}. 
+This type of grid is an instance of grids based on Platonic solids \cite{stan:2012}, which consider a Platonic solid circumscribed on the sphere, project its faces onto the sphere's surface, and apply subdivision on the projected faces to generate the grid cells.
+}
+
+\textcolor{red}{
+One of the major challenges of using grids based on Platonic solids is grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}), and is highly undesirable due to its lack of physical meaning.
+In the case of the cubed-sphere, it is expected that undesirable larger errors may appear at the edges of the original cube used to build the cubed-sphere grid.}
+
+The approach of \cite{lin:1996,putman:2007} involves constructing a two-dimensional (2D) scheme by combining the solution of one-dimensional (1D) conservative transport equations using a direction-splitting strategy on each cube face.
 The 1D equations are solved using the finite-volume approach of the Piecewise Parabolic Method (PPM) \cite{colella:1984,carpenter:1990}. 
 A notable feature of the scheme proposed by \cite{lin:1996} is its elimination of the splitting error under conditions where the initial transported scalar field density is constant and the wind is divergence-free. 
 This property is attained through modifications to the inner advection operators employed within the scheme. 
+
 The goal of this study is to reassess and suggest enhancements for the current FV3 transport scheme originally developed by \cite{putman:2007}, given its pivotal role in the horizontal dynamics of FV3. 
-We demonstrate that the scheme proposed by \cite{putman:2007} assumes constant metric terms during the application of the PPM to each 1D flux integration domain and employs a first-order departure point calculation for the 1D fluxes.
-We propose the development of a scheme that incorporates a second-order departure point calculation for the 1D fluxes and eliminates the assumption of constant metric terms. 
+It is demonstrated that the scheme proposed by \cite{putman:2007} assumes constant metric terms during the application of the PPM to each 1D flux integration domain and employs a first-order departure point calculation for the 1D fluxes.
+\textcolor{red}{
+The development of a scheme that incorporates a second-order departure point calculation for the 1D fluxes and eliminates the assumption of constant metric terms is proposed.}
 While the proposed scheme does not retain the property of splitting error elimination for divergence-free winds and constant scalar fields, it introduces only second-order errors in such scenarios.
 
 The proposed scheme performs slightly better for divergence-free wind simulations of the advection equation on the sphere.
@@ -209,10 +216,11 @@ Notably, the proposed scheme achieves second-order accuracy for divergent winds,
 Furthermore,  the proposed scheme is easy to implement in the current FV3 code and adds only a small extra computational cost.
 The extra cost is mainly due to the second-order departure point computation, which requires 1D linear interpolations at each cell edge in both directions of each cubed-sphere panel.
 
+
 This work is outlined as follows:
-in Section \ref{cs-grids}, we present the cubed-sphere grids, revisiting both the equiangular and equi-edge grids, and also discuss the treatment of ghost cells, providing all the tools we shall need during this work.
-In Section \ref{adv-2d}, we revisited the FV3 transport scheme on the cubed-sphere and we introduce the new proposed scheme.
-In Section \ref{num-exp}, we present numerical simulations comparing the proposed scheme with the current FV3 transport scheme. 
+Section \ref{cs-grids} presents the cubed-sphere grids, revisiting both the equiangular and equi-edge grids, and also discusses the treatment of ghost cells, providing all the tools shall be needed during this work.
+In Section \ref{adv-2d}, the FV3 transport scheme of \cite{putman:2007} is revisited on the cubed-sphere and an alternative scheme is proposed.
+In Section \ref{num-exp}, numerical simulations comparing the proposed scheme with the current FV3 transport scheme are reported.
 Final thoughts are presented in Section \ref{conclusion}.
 
 \newpage
@@ -220,13 +228,14 @@ Final thoughts are presented in Section \ref{conclusion}.
 \section{Cubed-sphere grids}
 \label{cs-grids}
 The goal of this Section is to briefly review the concept of cubed-sphere grids, particularly those available in FV3.
-To start with, we are going to present the mapping between the cube and the sphere introduced by \cite{sadourny:1972} in Section \ref{cs-equidistant}, also known as the equidistant mapping.
-Following that, we show that using a change of coordinates, we may use the equidistant mapping to create other mappings from the cube to the sphere.
+To start with, the mapping between the cube and the sphere introduced by \cite{sadourny:1972}, also known as the equidistant mapping, is presented in Section \ref{cs-equidistant}.
+After that, it is shown that by using a change of coordinates, the equidistant mapping can be utilized to create other mappings from the cube to the sphere.
 Namely, Section \ref{cs-equiangular} introduces the equiangular mapping introduced by \cite{ronchi:1996}, and Section \ref{cs-equiedge} introduces the equi-edge mapping introduced by \cite{chen:2021}. 
-In Section \ref{cs-grid}, we demonstrate how these mappings are utilized to generate cubed-sphere grids. 
-We mainly introduce all the notations and tools that will be needed for the remainder of this work.
-Finally, in Section \ref{cs-ghost}, we demonstrate how the ghost cells that we will need are generated.
-
+Section \ref{cs-grid} demonstrates how these mappings are utilized to generate cubed-sphere grids and introduces all the notations and it introduces all the notations and tools necessary for the subsequent parts of this work.
+\textcolor{red}{
+Finally, on the cubed-sphere, it is needed to define ghost cells, which are cells added outside each cubed-sphere face that allow for stencil computation near to the edges of the spherical cube.
+Therefore, in Section \ref{cs-ghost}, it is demonstrated how the needed ghost cells are generated.
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Equidistant mapping}
 \label{cs-equidistant}
@@ -671,7 +680,7 @@ A finite-volume approach is going to be used to solve Equations \eqref{1d-adv-xd
 The goal now is to describe the details of the numerical method proposed by \citep{putman:2007}, known as the FV3 scheme, currently used in FV3.
 In each part of the FV3 method that will described, we will propose modifications aimed at improvements. 
 Additionally, the scheme proposed in this work is named LT2.
-The justification for its name will be provided in the next sections, as it utilizes an average of two Lie-Trotter splittings \cite{holden:2010}, along with a second-order Runge-Kutta method for the departure point equation.
+The justification for its name will be provided in the next sections, as it utilizes an average of two Lie-Trotter splittings \cite{holden:2010}, along with a second-order Runge-Kutta method for the departure point equation that we shall obtain soon.
 }
 
 \subsection{The one-dimensional finite-volume discretization}
@@ -899,8 +908,8 @@ and ${q_i^M}$
 are the average or centroid values at the $i$-th cell.
 It is easy to see that integrating Equation \eqref{ppm-formula} on $x \in [x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ gives $q^M_i\Delta x$, therefore the PPM reconstructions preserves the mass on each cell. It is also easy to see that:
 \begin{align}
-	\lim_{x \to x_{i-\frac{1}{2}}}{q^M_i}(x) = q_{L,i}^M,\quad
-	\lim_{x \to x_{i+\frac{1}{2}}}{q^M_i}(x) = q_{R,i}^M.
+	\lim_{x \to x_{i-\frac{1}{2}}^+}{q^M}(x) = q_{L,i}^M,\quad
+	\lim_{x \to x_{i+\frac{1}{2}}^-}{q^M}(x) = q_{R,i}^M.
 \end{align}
 Therefore, the values $q_{L,i}^M$ and $q_{R,i}^M$ should approximate ${q_{i-\frac{1}{2}}^M}$ and ${q_{i+\frac{1}{2}}^M}$, respectively.}
 Furthermore, we consider:
@@ -1071,7 +1080,7 @@ Figure \ref{ltxdir} illustrates the idea behind this process on a cubed-sphere p
 	Interior cells are depicted using black lines,
 	while ghost cells are depicted using gray lines. 
 	All the winds shown are the ones used in the FV3 departure point scheme.
-	If the RK2 scheme is used, an additional layer of wind ghost values should be added at each boundary in (a) and (b). \label{ltxdir}}
+	If the RK2 scheme is used for the departure point calculation, an additional layer of wind ghost values should be added at each boundary in (a) and (b). \label{ltxdir}}
 \end{figure}
 
 Notice that this process may be repeated in the reverse order by solving the conservative transport equation, swapping the $x$ and $y$ directions, to obtain another solution ${q}^{xy,n}_{ij}$.
@@ -1537,7 +1546,7 @@ Horizontal wind divergence plays a pivotal role in many phenomena on the atmosph
 For example, hurricanes are fueled by strong horizontal wind convergence at the Earth’s surface, with strong horizontal wind divergence occurring at high altitudes.
 Therefore, we expect that the LT2 scheme has the potential to improve the forecast of these phenomena where wind divergence is present.
 For example, LT2 scheme may be used to conduct a study based on \cite{gao:2021}, where the impact of using different 1D PPM schemes of FV3 on hurricane intensity prediction is investigated. 
-This study highlights how modifying the advection scheme may improve hurricane intensity prediction and affect the eyewall convection location.
+This study highlights how modifying the advection scheme may improve hurricane intensity prediction and affect the eyewall convection location, and we expect that the LT2 scheme could yield better results in this scenario.
 }
 
 
