@@ -196,17 +196,15 @@ Cubed-sphere grids were originally proposed by \cite{sadourny:1972} and revisite
 This type of grid is an instance of grids based on Platonic solids \cite{stan:2012}, which consider a Platonic solid circumscribed on the sphere, project its faces onto the sphere's surface, and apply subdivision on the projected faces to generate the grid cells.
 }
 
-\textcolor{red}{
-One of the major challenges of using grids based on Platonic solids is grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}), and is highly undesirable due to its lack of physical meaning.
-In the case of the cubed-sphere, it is expected that undesirable larger errors may appear at the edges of the original cube used to build the cubed-sphere grid.}
-
 The approach of \cite{lin:1996,putman:2007} involves constructing a two-dimensional (2D) scheme by combining the solution of one-dimensional (1D) conservative transport equations using a direction-splitting strategy on each cube face.
 The 1D equations are solved using the finite-volume approach of the Piecewise Parabolic Method (PPM) \cite{colella:1984,carpenter:1990}. 
 A notable feature of the scheme proposed by \cite{lin:1996} is its elimination of the splitting error under conditions where the initial transported scalar field density is constant and the wind is divergence-free. 
 This property is attained through modifications to the inner advection operators employed within the scheme. 
 
-The goal of this study is to reassess and suggest enhancements for the current FV3 transport scheme originally developed by \cite{putman:2007}, given its pivotal role in the horizontal dynamics of FV3. 
-It is demonstrated that the scheme proposed by \cite{putman:2007} assumes constant metric terms during the application of the PPM to each 1D flux integration domain and employs a first-order departure point calculation for the 1D fluxes.
+\textcolor{red}{
+Therefore, given the relevance of the FV3 dynamical core,
+the goal of this study is to reassess and suggest enhancements for the current FV3 transport scheme originally developed by \cite{putman:2007}, given its pivotal role in the horizontal dynamics of FV3.}
+It is demonstrated in this work that the scheme proposed by \cite{putman:2007} assumes constant metric terms during the application of the PPM to each 1D flux integration domain and employs a first-order departure point calculation for the 1D fluxes.
 \textcolor{red}{
 The development of a scheme that incorporates a second-order departure point calculation for the 1D fluxes and eliminates the assumption of constant metric terms is proposed.}
 While the proposed scheme does not retain the property of splitting error elimination for divergence-free winds and constant scalar fields, it introduces only second-order errors in such scenarios.
@@ -538,6 +536,8 @@ It can be observed that in terms of length of the cells, the equi-edge grid is l
 Despite this, the equi-edge grid is the operational grid in some applications of FV3 \cite{harris:2021,chen:2021}, such as, for instance, 
 the Next Generation Global Prediction System (NGGPS) \cite{zhou:2019}, 
 because this grid is expected to produce less grid imprinting due to its greater uniformity near the original cube.
+\textcolor{red}{
+Grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}),  is a common problem that appears when using Platonic solid based spherical grids,  and is highly undesirable due to its lack of physical meaning.}
 
 \subsection{Ghost cells}
 \label{cs-ghost}
