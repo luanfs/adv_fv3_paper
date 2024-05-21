@@ -127,28 +127,16 @@
 %% Abstract
 \begin{abstract}
 %% Text of abstract
-The finite-volume dynamical core developed by GFDL-NOAA-USA, originally designed for latitude-
-longitude grids, was adapted to the cubed-sphere to enhance scalability on massively parallel supercomputers,
-resulting in the creation of the FV3 dynamical core. FV3 serves as the dynamical core for many models
-worldwide, and in 2019, it was officially designated as the dynamical core for the new Global Forecast System
-of the National Weather Service in the USA, replacing the spectral model. The finite-volume approach
-employed by FV3 to solve horizontal dynamics involves applying advection fluxes for different variables;
-thus, the advection scheme plays a key role in the model. Therefore, in this thesis, we propose to investigate
-the details of the advection scheme of FV3. We were able to suggest modifications to the FV3 advection
-scheme that significantly improved advection for divergent winds with only a small extra computational
-effort and of simple implementation in the existing codes. We conducted several numerical simulations using
-the advection and shallow-water equations. Since the FV3 advection scheme utilizes a splitting strategy,
-combining 1D finite-volume flux operators, our improvements were obtained by improving the departure
-point computation for the 1D flux operators and modifying the way the metric term of the cubed-sphere is
-treated when computing the 1D fluxes. Through simulations, we demonstrate that the current FV3 advection
-scheme is only first-order accurate for divergent winds, while our scheme is second-order accurate. For
-divergence-free winds, both schemes are second-order, with our scheme being slightly more accurate.
-One major difficulty in working on the cubed-sphere is handling coordinate discontinuity along the cube
-faces, which may lead to larger errors in these regions. However, we demonstrate through numerical
-simulations that the proposed advection scheme exhibits slightly reduced sensitivity to the cube corners. In
-conclusion, this thesis offers a comprehensive examination of the FV3 discretization of horizontal dynamics,
-providing valuable insights into enhancing the accuracy of the FV3 dynamical core, particularly for divergent
-winds.
+The cubed-sphere finite-volume dynamical core (FV3), developed by GFDL-NOAA-USA, serves as the dynamical core for many models worldwide. 
+In 2019, it was officially designated as the dynamical core for the new Global Forecast System of the National Weather Service in the USA, replacing the spectral model.
+The finite-volume approach employed by FV3 to solve horizontal dynamics involves the application of transport finite-volume fluxes for different variables. 
+Hence, the transport scheme plays a key role in the model.
+Therefore, this work proposes to revisit the details of the transport scheme of FV3 with the aim of adding enhancements.
+We proposed modifications to the FV3 transport scheme, which notably enhanced accuracy, particularly in the presence of divergent winds, as evidenced by numerical experiments. 
+In contrast to the FV3 scheme's first-order accuracy in the presence of divergent winds, the proposed scheme achieves second-order accuracy.
+For divergence-free winds, both schemes are second-order, with our scheme being slightly more accurate.
+Additionally,  the proposed scheme requires only a small additional computational effort and are of simple implementation in the existing codes.
+In summary, the proposed scheme offer significant improvements in accuracy, particularly in the presence of divergent winds, which are present in some atmospheric phenomena, while maintaining computational efficiency.
 \end{abstract}
 
 %%Graphical abstract
@@ -185,7 +173,7 @@ divergent winds}.
 %% main text
 %%
 
-\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{intro}
