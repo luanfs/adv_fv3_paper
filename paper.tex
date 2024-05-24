@@ -87,7 +87,7 @@
 %%             country={}}
 %% \fntext[label3]{}
 
-\title{Analysis of finite-volume advection schemes on cubed-sphere grids and an accurate \textcolor{red}{scheme} for divergent winds}
+\title{Analysis of finite-volume advection schemes on cubed-sphere grids and an accurate scheme for divergent winds}
 
 %% use optional labels to link authors explicitly to addresses:
 %% \author[label1,label2]{}
@@ -158,10 +158,9 @@ Cubed-sphere,
 finite-volume,
 transport,
 advection,
-\textcolor{red}{
 atmosphere dynamics,
 numerical weather prediction,
-divergent winds}.
+divergent winds.
 \end{keyword}
 
 \end{frontmatter}
@@ -199,23 +198,19 @@ Thus, the transport scheme assumes a critical role in shaping the horizontal dyn
 %The C-grid half-step makes use of computationally inexpensive upwind flux operators, while the D-grid incorporates the FV3 transport scheme fluxes proposed by \cite{lin:1996,putman:2007}.
 %Consequently, this method relies entirely on transport finite-volume fluxes. 
 
-\textcolor{red}{
 The transport scheme employed in FV3, proposed by \cite{putman:2007}, extends the method introduced by \cite{lin:1996}, moving from latitude-longitude grids to cubed-sphere grids, aiming for better performance on massive parallel supercomputers, which is difficult to achieve on latitude-longitude grids due to the pole problem \cite{will:2007,stan:2012}.
 Cubed-sphere grids were originally proposed by \cite{sadourny:1972} and revisited by \cite{rancic:1996,ronchi:1996}. 
 This type of grid is an instance of grids based on Platonic solids \cite{stan:2012}, which consider a Platonic solid circumscribed on the sphere, project its faces onto the sphere's surface, and apply subdivision on the projected faces to generate the grid cells.
-}
 
 The approach of \cite{lin:1996,putman:2007} involves constructing a two-dimensional (2D) scheme by combining the solution of one-dimensional (1D) conservative transport equations using a direction-splitting strategy on each cube face.
 The 1D equations are solved using the finite-volume approach of the Piecewise Parabolic Method (PPM) \cite{colella:1984,carpenter:1990}. 
 A notable feature of the scheme proposed by \cite{lin:1996} is its elimination of the splitting error under conditions where the initial transported scalar field density is constant and the wind is divergence-free. 
 This property is attained through modifications to the inner advection operators employed within the scheme. 
 
-\textcolor{red}{
 Therefore, given the relevance of the FV3 dynamical core,
-the goal of this study is to reassess and suggest enhancements for the current FV3 transport scheme originally developed by \cite{putman:2007}, given its pivotal role in the horizontal dynamics of FV3.}
+the goal of this study is to reassess and suggest enhancements for the current FV3 transport scheme originally developed by \cite{putman:2007}, given its pivotal role in the horizontal dynamics of FV3.
 It is demonstrated in this work that the scheme proposed by \cite{putman:2007} assumes constant metric terms during the application of the PPM to each 1D flux integration domain and employs a first-order departure point calculation for the 1D fluxes.
-\textcolor{red}{
-A scheme that incorporates a second-order departure point calculation for the 1D fluxes and eliminates the assumption of constant metric terms is proposed.}
+A scheme that incorporates a second-order departure point calculation for the 1D fluxes and eliminates the assumption of constant metric terms is proposed.
 While the proposed scheme does not retain the property of splitting error elimination for divergence-free winds and constant scalar fields, it ensures second-order errors in such scenarios.
 
 The proposed scheme performs slightly better for divergence-free wind simulations of the advection equation on the sphere.
@@ -239,10 +234,9 @@ To start with, the mapping between the cube and the sphere introduced by \cite{s
 After that, it is shown that by using a change of coordinates, the equidistant mapping can be utilized to create other mappings from the cube to the sphere.
 Namely, Section \ref{cs-equiangular} introduces the equiangular mapping introduced by \cite{ronchi:1996}, and Section \ref{cs-equiedge} introduces the equi-edge mapping introduced by \cite{chen:2021}. 
 Section \ref{cs-grid} demonstrates how these mappings are utilized to generate cubed-sphere grids and introduces all the notations and it introduces all the notations and tools necessary for the subsequent parts of this work.
-\textcolor{red}{
 Finally, on the cubed-sphere, it is needed to define ghost cells, which are cells added outside each cubed-sphere face that allow for stencil computation near to the edges of the spherical cube.
 Therefore, in Section \ref{cs-ghost}, it is demonstrated how the needed ghost cells are generated.
-}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Equidistant mapping}
 \label{cs-equidistant}
@@ -268,13 +262,13 @@ The equidistant mapping is a family of maps ${\Gamma}_{p}: [-1,1] \times [-1,1] 
 	\label{gamma_456}
 {\Gamma}_{3+k}(X,Y)&=-{\Gamma}_{k}(Y,X),\quad k=1,2,3.
 \end{align}
-\textcolor{red}{
-These mappings are defined individually for each of the 6 cube faces, also called panels, denoted by $p$, and they allow for the coverage of the sphere.}
+
+These mappings are defined individually for each of the 6 cube faces, also called panels, denoted by $p$, and they allow for the coverage of the sphere.
 The idea behind this mapping is illustrated in Figure \ref{sph-cube-equidist}, where the coordinates $(X,Y)$ are thought to live on the cube faces.
 Figure \ref{sph-cube-equidist} shows how the grid points are equally spaced on the cube and then projected onto the sphere, hence the name equidistant.
 Note that there are other ways to arrange the coordinates over the panels.
-Each one defines a \textcolor{red}{connectivity pattern} between the panels, as discussed by \cite[Section 2.1]{chen:2021}.
-The \textcolor{red}{connectivity pattern} presented here is known as the staircase arrangement \textcolor{red}{(see Figure 2 in \cite{chen:2021})}, which is used in FV3 and provides some advantages for exchanging information between panels.
+Each one defines a connectivity pattern between the panels, as discussed by \cite[Section 2.1]{chen:2021}.
+The connectivity pattern presented here is known as the staircase arrangement (see Figure 2 in \cite{chen:2021}), which is used in FV3 and provides some advantages for exchanging information between panels.
 \begin{figure}[!htb]
 	\centering
 	\begin{subfigure}{0.45\textwidth}
@@ -292,9 +286,9 @@ The \textcolor{red}{connectivity pattern} presented here is known as the stairca
 	\begin{subfigure}{0.45\textwidth}
 	\centering
 	\includegraphics[width=1.1\linewidth]{g0}
-	\caption{\textcolor{red}{Equi-edge mapping for $p_z=0$.}\label{sph-cube-equiedge}}
+	\caption{Equi-edge mapping for $p_z=0$.\label{sph-cube-equiedge}}
 \end{subfigure}
-\caption{Illustration of the cube-to-sphere projection using the equidistant (a),  equiangular (b) and the \textcolor{red}{equi-edge}  (c) mappings. This figure uses a cross section obtained with $p_z=0$.}
+\caption{Illustration of the cube-to-sphere projection using the equidistant (a),  equiangular (b) and the equi-edge  (c) mappings. This figure uses a cross section obtained with $p_z=0$.}
 \label{sph-cube-mappings}
 \end{figure}
 
@@ -340,7 +334,7 @@ the standard inner product of $\mathbb{R}^3$ and
 $\{\boldsymbol{e}_x, \boldsymbol{e}_y\}$ is the normalization of the tangent vector basis
 $\{{\partial_x {\Psi}_p}, {\partial_y {\Psi}_p}\}$.
 
-\textcolor{red}{Given a tangent vector field $\boldsymbol{u}$ on the sphere, also known as wind, we may represent it using the basis obtained by cubed-sphere coordinates:
+Given a tangent vector field $\boldsymbol{u}$ on the sphere, also known as wind, we may represent it using the basis obtained by cubed-sphere coordinates:
 \begin{equation}
 	\label{contravariant-wind}
 	\boldsymbol{u}(x, y, p) = 
@@ -377,7 +371,7 @@ Finally, we recall that the horizontal divergence operator for a  wind $\boldsym
 for $x,y\in[-a,a]$, $p$ is the panel and
 $\mathfrak{u}$ and $\mathfrak{v}$ are the contravariant wind components.
 The divergence operator shall be used in the transport model in Section \ref{adv-2d}.
-}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Equiangular mapping}
 \label{cs-equiangular}
@@ -390,19 +384,18 @@ grid points equally, as illustrated in Figure \ref{sph-cube-equiangular}, hence 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Equi-edge mapping}
 \label{cs-equiedge}
-\textcolor{red}{
-Another cubed-sphere mapping is the equi-edge mapping, initially introduced by \cite{chen:2021}, which utilizes $\beta(x) = \sqrt{2}\tan{x}$ and $a=\arcsin{\big(\frac{1}{\sqrt{3}}\big)}$. It is worth noting that while this mapping technique had been used previously in FV3, it was not formally documented until the work \cite{chen:2021}.}
+Another cubed-sphere mapping is the equi-edge mapping, initially introduced by \cite{chen:2021}, which utilizes $\beta(x) = \sqrt{2}\tan{x}$ and $a=\arcsin{\big(\frac{1}{\sqrt{3}}\big)}$. It is worth noting that while this mapping technique had been used previously in FV3, it was not formally documented until the work \cite{chen:2021}.
 The idea behind the equi-edge mapping lies in partitioning the edges of the spherical cube equally,
 and then generating the other cells, hence the name equi-edge.
 Also, this mapping leads to more uniform grid cells after applying the grid stretching option of FV3 \citep{harris:2016, chen:2021}.
-\textcolor{red}{This mapping is illustrated in Figure \ref{sph-cube-equiedge}}.
+This mapping is illustrated in Figure \ref{sph-cube-equiedge}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cubed-sphere grid generation}
 \label{cs-grid}
 Let us fix two positive integers $N$ and $\nu$, where $N$ represents the number of cells in both the $x$ and $y$ directions, and $\nu$ represents the number of ghost cell layers. 
 The equiangular or equi-edge mappings, denoted by $\Psi_p$, introduced previously, are considered to generate the cubed-sphere grid.
-\textcolor{red}{The notation $\Psi_p$ is used for both equiangular and equi-edge mappings, as what will be discussed does not depend particularly on the mapping.}
+The notation $\Psi_p$ is used for both equiangular and equi-edge mappings, as what will be discussed does not depend particularly on the mapping.
 For simplicity, the metric term $\sqrt{\mathfrak{g}}_{\Psi}$ is denoted by $\sqrt{\mathfrak{g}}$.
 To generate the cubed-sphere grid, the domain $[-a,a]\times[-a,a]$ is discretized using uniformly spaced points.
 \begin{align}
@@ -424,17 +417,15 @@ Firstly, we shall focus the attention on the interior cells; the generation of g
 	\centering
 	\includegraphics[width=0.5\linewidth]{fv_grid}
 	\caption{
-	\textcolor{red}{
 	Illustration of the discrete grid indexes for a cell. 
 	The corner points are depicted using black squares, while the centroids are represented using black circles. 
 	The  left-right and up-down midpoints of the edges,  are illustrated in blue and red circles, respectively.
-Additionally, this figure shows the positions of the contravariant wind components $\mathfrak{u}$ and $\mathfrak{v}$ in a C-grid discretization for the transport model, along with the fluid density $\rho$ and tracer concentration $\phi$ at the centers.}
+Additionally, this figure shows the positions of the contravariant wind components $\mathfrak{u}$ and $\mathfrak{v}$ in a C-grid discretization for the transport model, along with the fluid density $\rho$ and tracer concentration $\phi$ at the centers.
 	\label{cgrid}}
 \end{figure}
 
 There are four types of grid points on the cubed-sphere that are needed to be computed: the center, corners, right-left edge midpoints, and  up-down edge midpoints. 
-\textcolor{red}
-{These points are illustrated in Figure \ref{cgrid}.}
+These points are illustrated in Figure \ref{cgrid}.
 The corner points are computed as:
 \begin{equation}
 	\label{corner-points}
@@ -472,14 +463,13 @@ and the up-down edge points  $\Psi_{i,j+\frac{1}{2}}$ are also  given by the ave
 It is easy to see that generating the grid points using these averages has an $\mathcal{O}(\Delta x^2)$ difference compared to generating these points using a cubed-sphere mapping ${\Psi}_p$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textcolor{red}{
 The following geodesic distances in $x$ and $y$ directions, respectively, are introduced:
 \begin{align}
 	\label{distcube}
 	\widehat{l^x_{ij}} = d(\Psi_{i+\frac{1}{2},j},\Psi_{i-\frac{1}{2},j}) , \quad
 	\widehat{l^y_{ij}} = d(\Psi_{i,j+\frac{1}{2}},\Psi_{i,j-\frac{1}{2}}),
 \end{align}
-where $d(P,Q) = R\arccos{(\langle P, Q \rangle)}$, for $P,Q \in \mathbb{S}^2_R$.}
+where $d(P,Q) = R\arccos{(\langle P, Q \rangle)}$, for $P,Q \in \mathbb{S}^2_R$.
 These distances may be represented in terms of the tangent vector norms as:
 \begin{align}
 	\widehat{l^x_{ij}} = 
@@ -545,8 +535,7 @@ It can be observed that in terms of length of the cells, the equi-edge grid is l
 Despite this, the equi-edge grid is the operational grid in some applications of FV3 \cite{harris:2021,chen:2021}, such as, for instance, 
 the Next Generation Global Prediction System (NGGPS) \cite{zhou:2019}, 
 because this grid is expected to produce less grid imprinting due to its greater uniformity near the original cube.
-\textcolor{red}{
-Grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}),  is a common problem that appears when using Platonic solid based spherical grids,  and is highly undesirable due to its lack of physical meaning.}
+Grid imprinting, which refers to the appearance of grid features on the solution (cf. e.g., \cite{peixoto:2013, weller:2012, mouallem:2023}),  is a common problem that appears when using Platonic solid based spherical grids,  and is highly undesirable due to its lack of physical meaning.
 
 \subsection{Ghost cells}
 \label{cs-ghost}
@@ -621,7 +610,7 @@ Similar formulas are used for the $y$ component.
 \label{adv-2d}
 The goal of this Section is to present and solve numerically the conservative transport equation on the cubed-sphere. 
 We are going to consider the equi-edge or equiangular cubed-sphere mappings $\Psi_p$ and their respective local coordinates $(x,y)$.
-\textcolor{red}{Once again, the metric term is denoted by $\sqrt{\mathfrak{g}}_{\Psi}$ by $\sqrt{\mathfrak{g}}$ for simplicity.}
+Once again, the metric term is denoted by $\sqrt{\mathfrak{g}}_{\Psi}$ by $\sqrt{\mathfrak{g}}$ for simplicity.
 Following \cite{nair:2010}, the transport model without sources or sinks is considered:
 \begin{align}
 	\label{transp-rho}
@@ -630,9 +619,8 @@ Following \cite{nair:2010}, the transport model without sources or sinks is cons
 	[\partial_t (\rho \phi) + \nabla \cdot (\rho \phi \boldsymbol{u})](x,y,p,t)&=0,
 \end{align}
 for $x,y\in[-a,a]$, $t \in [0,T]$, where $T$ is the final time,
-\textcolor{red}
-{$\boldsymbol{u}$ is the wind, $\mathfrak{u}$ and $\mathfrak{v}$ are the contravariant wind components (Equation \ref{contravariant-wind}),
-$\rho$ is the fluid density and $\phi$ is the tracer concentration}.
+$\boldsymbol{u}$ is the wind, $\mathfrak{u}$ and $\mathfrak{v}$ are the contravariant wind components (Equation \ref{contravariant-wind}),
+$\rho$ is the fluid density and $\phi$ is the tracer concentration.
 Additionally, for the transport model, it is assumed that the initial conditions are given as $\rho(x,y,p,0)=\rho_0(x,y,p)$ and $\phi(x,y,p,0)=\phi_0(x,y,p)$, given $\rho_0$ and $\phi_0$. % and that the boundary conditions are related to the cubed-sphere topology.
 Equation \eqref{transp-rho} is the continuity equation and Equation \eqref{transp-phi} is the conservative advection equation.
 In this framework, $\rho \phi$ represents the tracer density, and the total masses of $\rho$ and $\rho \phi$ are preserved.  Therefore, these quantities are referred to as conserved quantities.
@@ -645,7 +633,7 @@ That is, $\phi$ satisfies the non-conservative advection equation:
 	\langle\boldsymbol{u}, \nabla \phi \rangle](x,y,p,t)&=0.
 \end{align}
 Equations \eqref{transp-rho} and \eqref{transp-phi} have the same form. 
-\textcolor{red}{Hence, it follows from the definition of the divergence operator in terms of the cubed-sphere mapping (Equation \eqref{div-def}) that the equation that needs to be solved may be uniquely expressed as:}
+Hence, it follows from the definition of the divergence operator in terms of the cubed-sphere mapping (Equation \eqref{div-def}) that the equation that needs to be solved may be uniquely expressed as:
 \begin{equation}
 	\label{2d-adv}
 	[{\partial_t (\sqrt{\mathfrak{g}}q)}+
@@ -684,13 +672,12 @@ for $i=-\nu+1, \ldots, N + \nu$, using $q_{ij}^n$ as initial data.
 Therefore, the solution to the 1D conservative transport equation needs to be specified.
 A finite-volume approach is going to be used to solve Equations \eqref{1d-adv-xdir} and \eqref{1d-adv-ydir}, as described in the next subsection.
 
-\textcolor{red}
-{
+
 The goal now is to describe the details of the numerical method proposed by \citep{putman:2007}, known as the FV3 scheme, currently used in FV3.
 In each part of the FV3 method that will described, we will propose modifications aimed at improvements. 
 Additionally, the scheme proposed in this work is named LT2.
 The justification for its name will be provided in the next sections, as it utilizes an average of two Lie-Trotter splittings \cite{holden:2010}, along with a second-order Runge-Kutta method for the departure point equation that we shall obtain soon.
-}
+
 
 \subsection{The one-dimensional finite-volume discretization}
 \label{1d-adv}
@@ -716,7 +703,7 @@ The average values in the $x$ direction for the $i$-th cell are defined as:
 Following the finite-volume approach as in \cite{leveque:1990},
 Equation \eqref{1d-avd-eq} is integrated in space on 
 $[x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$
-followed by an integration in time on $[t^{n},t^{n+1}]$, leading to the integral version of the \textcolor{red}{conservative transport equation}:
+followed by an integration in time on $[t^{n},t^{n+1}]$, leading to the integral version of the conservative transport equation:
 \begin{equation}
 	\label{1d-adv-integral}
 	\overline{(\sqrt{\mathfrak{g}}q)}_i(t^{n+1}) =  \overline{(\sqrt{\mathfrak{g}}q)}_i(t^{n}) -
@@ -773,8 +760,8 @@ where
 	 (\widetilde{\sqrt{\mathfrak{g}}{q}})(x, t^n) \,dx,
 \end{equation} 
 is the numerical flux, where $\widetilde{(\sqrt{\mathfrak{g}}{q})}$ is a subgrid reconstruction function of $\sqrt{\mathfrak{g}}{q}$ using the average values $\overline{(\sqrt{\mathfrak{g}}q)}^{n}_{i}$ and $\tilde{x}_{i+\frac{1}{2}}^n$, which is the estimated departure point obtained by solving numerically Equation \eqref{1d-dp-equation}.
-Since the Courant-Friedrichs-Lewy (CFL) condition is assumed in this work, this integral shall be constrained to a single cell, namely $[x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ or $[x_{i+\frac{1}{2}},x_{i+\frac{3}{2}}]$\textcolor{red}{, as will be discussed in detail in Section \ref{timeav-cfl}.
-This scheme allows for the use of large time steps, as discussed in \cite{lin:1996,chen:2017}, but it is not considered in this work, since the FV3 discretization assumes the CFL condition.}
+Since the Courant-Friedrichs-Lewy (CFL) condition is assumed in this work, this integral shall be constrained to a single cell, namely $[x_{i-\frac{1}{2}},x_{i+\frac{1}{2}}]$ or $[x_{i+\frac{1}{2}},x_{i+\frac{3}{2}}]$, as will be discussed in detail in Section \ref{timeav-cfl}.
+This scheme allows for the use of large time steps, as discussed in \cite{lin:1996,chen:2017}, but it is not considered in this work, since the FV3 discretization assumes the CFL condition.
 
 In practice, the scheme from Equation \eqref{fv-scheme} is replaced by using the midpoint rule for integration, that is $\overline{(\sqrt{\mathfrak{g}}q)}_{i}^n \approx q_{i}^n\sqrt{\mathfrak{g}}_{i}$, and therefore the scheme becomes a method to update cell center values, namely:
 \begin{equation}
@@ -818,9 +805,9 @@ To achieve second-order accuracy in time, a second-order Runge-Kutta (RK2) metho
 	\end{cases}
 \end{equation}
 where $$\alpha_{i+\frac{1}{2}}^n =  \frac{\mathfrak{u}_{i+\frac{1}{2}}^n\Delta t}{2\Delta x}.$$
-\textcolor{red}{
+
 Notice that, in order for the linear interpolation of Equation \eqref{rk2-wind} to make sense, it is necessary to ensure that $|\alpha_{i+\frac{1}{2}}^n| \in [0,1]$. 
-This requirement is particularly fulfilled when the CFL number is less than one, as discussed in Section \ref{timeav-cfl}.}
+This requirement is particularly fulfilled when the CFL number is less than one, as discussed in Section \ref{timeav-cfl}.
 The LT2 scheme requires the wind at two time levels, while FV3 uses only one time level. 
 Since this work performs simulations with prescribed winds, it is  assumed that the wind is known at time levels $n$ and $n+\frac{1}{2}$.
 However, in the FV3 shallow-water solver, the C-grid step first takes the D-grid wind and convert it to a C-grid wind at time level $n$, and then the  C-grid wind at the time level $n+\frac{1}{2}$ is computed.
@@ -872,14 +859,14 @@ Also, the upwind approach of the numerical flux becomes clear at this point.
 Now that the computation of the departure points has been addressed, the next step is to describe the subgrid reconstruction process, which allows the evaluation of the flux in Equation \eqref{numerical-flux}.
 
 In FV3, it is assumed that the metric $\sqrt{\mathfrak{g}}$ appearing in Equation \eqref{numerical-flux} is constant over the integration domain, specifically equal to $\sqrt{\mathfrak{g}}_{i+\frac{1}{2}}$, hence only $q$ needs to be reconstructed instead of $\sqrt{\mathfrak{g}}q$.
-\textcolor{red}{ This implies the following approximation in Equation \eqref{1d-avflux-approx}:
+This implies the following approximation in Equation \eqref{1d-avflux-approx}:
 \begin{equation}
 	\label{1d-avflux-approx}
 	\int^{x_{i+\frac{1}{2}}}_{ x_{i+\frac{1}{2}}^d(t^n,t^{n+1})} (\sqrt{\mathfrak{g}}q)(x,t^n)\,dx = 
 	\sqrt{\mathfrak{g}}_{i+\frac{1}{2}}
 	\int^{x_{i+\frac{1}{2}}}_{ x_{i+\frac{1}{2}}^d(t^n,t^{n+1})} q(x,t^n)\,dx + \mathcal{O}(\Delta x).
 \end{equation}
-The scheme proposed in this work, on the other hand, considers the reconstruction of $\sqrt{\mathfrak{g}}q$, avoiding the approximation in Equation \eqref{1d-avflux-approx}.}
+The scheme proposed in this work, on the other hand, considers the reconstruction of $\sqrt{\mathfrak{g}}q$, avoiding the approximation in Equation \eqref{1d-avflux-approx}.
 The reconstruction employed here for both the FV3 and LT2 schemes uses the PPM scheme from \cite{colella:1984,carpenter:1990}.
 We introduce the grid function $q^M$ expressed as:
 \begin{align}
@@ -892,7 +879,7 @@ We introduce the grid function $q^M$ expressed as:
 		\quad &\text{if }{M=\text{LT2}}.
 	\end{cases}
 \end{align}
-Following \cite{harris:2021}, the PPM reconstruction on the $i$-th cell for a grid function $q^M$ may be expressed as: \textcolor{red}{
+Following \cite{harris:2021}, the PPM reconstruction on the $i$-th cell for a grid function $q^M$ may be expressed as:
 \begin{align}
 	\label{ppm-formula}
 	\widetilde{q^M}(x) =
@@ -920,7 +907,7 @@ It is easy to see that integrating Equation \eqref{ppm-formula} on $x \in [x_{i-
 	\lim_{x \to x_{i-\frac{1}{2}}^+}{q^M}(x) = q_{L,i}^M,\quad
 	\lim_{x \to x_{i+\frac{1}{2}}^-}{q^M}(x) = q_{R,i}^M.
 \end{align}
-Therefore, the values $q_{L,i}^M$ and $q_{R,i}^M$ should approximate ${q_{i-\frac{1}{2}}^M}$ and ${q_{i+\frac{1}{2}}^M}$, respectively.}
+Therefore, the values $q_{L,i}^M$ and $q_{R,i}^M$ should approximate ${q_{i-\frac{1}{2}}^M}$ and ${q_{i+\frac{1}{2}}^M}$, respectively.
 Furthermore, we consider:
 \begin{align}
 	\label{phi_L}
@@ -1154,8 +1141,7 @@ In this framework, the tracer concentration is given by $\phi^n = \frac{(\rho \p
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Numerical experiments}
 \label{num-exp}
-\textcolor{red}{
-In this Section, the goal is to present simulations of the numerical solution of the transport model, governed by Equations \eqref{transp-rho} and \eqref{transp-phi}, utilizing the FV3 and LT2 schemes. As mentioned earlier, the tracer concentration $\phi$ is advected in the transport model.}
+In this Section, the goal is to present simulations of the numerical solution of the transport model, governed by Equations \eqref{transp-rho} and \eqref{transp-phi}, utilizing the FV3 and LT2 schemes. As mentioned earlier, the tracer concentration $\phi$ is advected in the transport model.
 To specify the simulation, including the initial condition for the tracer concentration $\phi_0$, the zonal wind component  denoted by $u_\lambda$, and the meridional wind component denoted by $v_\theta$, need to be defined.
 The conversion from these wind components to cubed-sphere contravariant wind components (Equation \eqref{contravariant-wind}) is detailed in \ref{ap-wind}.
 
@@ -1174,7 +1160,7 @@ The $p$-norm, $p \ge 1,$ for a cubed-sphere grid function $q_{ijm}$ is defined a
 		\max_{i,j=1, \ldots, N,m=1,\ldots,6}{|q_{ijm}|} & \text{if } p=\infty.
 	\end{cases}
 \end{equation}
-\textcolor{red}{
+
 The relative error in the $p$-norm are computed as:
 \begin{equation}
 	\label{error-pnorm}
@@ -1187,7 +1173,7 @@ The order of convergence is computed as
 \begin{equation}
 \text{order} = {\ln{\bigg(\frac{E_4}{E_{3}}\bigg)}}
 \frac{1}{\ln{2}}.
-\end{equation}}
+\end{equation}
 
 \subsection{Rotated zonal wind experiments}
 In this Section, the following rotated zonal wind field based on \cite{will:1992} is considered:
@@ -1516,47 +1502,43 @@ This discrepancy arises because the FV3 splitting is designed for divergence-fre
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Concluding remarks}
 \label{conclusion}
-\textcolor{red}{This work has revisited the FV3 transport scheme in all its details}. This thorough examination has allowed for proposed modifications to improve the accuracy of the FV3 advection scheme, leading to a proposed scheme named LT2.
+This work has revisited the FV3 transport scheme in all its details. This thorough examination has allowed for proposed modifications to improve the accuracy of the FV3 advection scheme, leading to a proposed scheme named LT2.
 
 The FV3 transport scheme relies on applying 1D finite-volume fluxes, namely the PPM, using a direction-splitting strategy.
-\textcolor{red}{The proposed modifications to the 1D scheme aim to allow a more accurate treatment in handling metric terms and computing the departure points.}
+The proposed modifications to the 1D scheme aim to allow a more accurate treatment in handling metric terms and computing the departure points.
 Furthermore, the FV3 scheme combines the 1D fluxes in such a way that the splitting error for a constant scalar field and divergence-free wind is eliminated.
 In contrast, the LT2 scheme does not have this property but introduces a second-order error in this case.
 
-\textcolor{red}{To compare both schemes, this paper has considered a transport model on the sphere, where it is needed to solve two conservative transport equations: one for the tracer concentration and another for the fluid density. 
-Subsequently, numerical simulations were conducted with both schemes.}
+To compare both schemes, this paper has considered a transport model on the sphere, where it is needed to solve two conservative transport equations: one for the tracer concentration and another for the fluid density. 
+Subsequently, numerical simulations were conducted with both schemes.
 
 The LT2 scheme showed to  have slightly smaller errors than the FV3 scheme for divergence-free winds.
 Both schemes are second-order when no limiter is employed and the wind is divergence-free.
 The major difference between FV3 and LT2 is when the wind is not divergence-free.
-In this case, FV3 is only first order, while LT2 is second-order. Even with a limiter, LT2 is much more accurate than FV3 in this case, \textcolor{red}{specially in the $L_2$ norm.}
+In this case, FV3 is only first order, while LT2 is second-order. Even with a limiter, LT2 is much more accurate than FV3 in this case, specially in the $L_2$ norm.
 This was demonstrated consistently throughout the simulations.
 Therefore, the major conclusion here is that the LT2 scheme is more accurate regardless of whether the wind is divergence-free or not, while FV3 is only accurate for divergence-free winds.
 
 %Furthermore, during the advection a Gaussian hill through a rotated zonal wind, both FV3 and LT2 schemes exhibited small spikes in errors whenever the Gaussian hill passed over a corner. 
 %Overall, the LT2 scheme showed slightly smaller errors in this test.
-%Additionally, \textcolor{red}{it was} observed that the equi-edge grid generally exhibited smaller errors compared to the equiangular grid for all simulations, with the LT2 scheme demonstrating good results in both grids.
+%Additionally, {it was} observed that the equi-edge grid generally exhibited smaller errors compared to the equiangular grid for all simulations, with the LT2 scheme demonstrating good results in both grids.
 
 
 
-\textcolor{red}{
 Although this paper has considered the transport model, the ultimate goal is to use the LT2 scheme within the full three-dimensional non-hydrostatic solver. 
-In particular, the LT2 scheme may be used to compute the fluid depth and the absolute vorticity fluxes in the shallow-water equations that are solved in the three-dimensional non-hydrostatic solver along the Lagrangian surfaces \cite{lin:2004}.}
+In particular, the LT2 scheme may be used to compute the fluid depth and the absolute vorticity fluxes in the shallow-water equations that are solved in the three-dimensional non-hydrostatic solver along the Lagrangian surfaces \cite{lin:2004}.
 
-\textcolor{red}{
 It is anticipated that shallow-water numerical experiments were also conducted using both the FV3 and LT2 schemes, along with the test cases from \cite{will:1992} and \cite{galewsky:2004}. It was observed that the LT2 scheme did not deteriorate the accuracy of the shallow-water solver. 
 Both schemes showed very similar results for these shallow-water tests.
 This is expected, as most of the shallow-water tests available on the literature have small or no wind divergence.
 We are currently working on developing a test for the shallow-water equations where divergence plays a key role in the solution dynamics to test the LT2 and FV3 schemes in this case.
-In this scenario, it is expected that the LT2 scheme should introduce a more accurate solution.}
+In this scenario, it is expected that the LT2 scheme should introduce a more accurate solution.
 
-\textcolor{red}{
 Horizontal wind divergence plays a pivotal role in many phenomena on the atmosphere such as in tropical cyclones, hurricanes and in the Intertropical Convergence Zone \cite{holton:2012}.
 For example, hurricanes are fueled by strong horizontal wind convergence at the Earth’s surface, with strong horizontal wind divergence occurring at high altitudes.
 Therefore, we expect that the LT2 scheme has the potential to improve the forecast of these phenomena where wind divergence is present.
 For example, LT2 scheme may be used to conduct a study based on \cite{gao:2021}, where the impact of using different 1D PPM schemes of FV3 on hurricane intensity prediction is investigated. 
 This study highlights how modifying the advection scheme may improve hurricane intensity prediction and affect the eyewall convection location, and we expect that the LT2 scheme could yield better results in this scenario.
-}
 
 
 \section*{CRediT authorship contribution statement}
@@ -1746,7 +1728,6 @@ $q$ satisfies Equation \eqref{1d-avd-eq}, then:
 
 
 \begin{proof}
-\textcolor{red}{
 To start with, the variable $\varphi = \sqrt{\mathfrak{g}}q$ is introduced to simplify the notation.
 Let us consider the mapping $s\in[t^n,t^{n+1}] \to  x_{i+\frac{1}{2}}^d(t^n,s)$. 
 Integrating $\varphi$ at time $t^n$ over all the range of $x_{i+\frac{1}{2}}^d(t^n,s)$ for $s\in[t^n,t^{n+1}]$ yields:
@@ -1807,7 +1788,7 @@ One check upon inspection again that $\varphi$ that solves Equation \eqref{dqdt}
 	\exp{\bigg(-\int_{t}^{s} {\partial_x}{\mathfrak{u}}\big( x_{i+\frac{1}{2}}^d(\tau,s),\tau\big)  \,d\tau \bigg)}
 	\varphi(x_{i+\frac{1}{2}},s).
 \end{equation}
-Equation \eqref{phi-u} can be obtained by multiplying Equation \eqref{xs_int} by Equation \eqref{q_int} at $t=t^n$, which concludes the proof.}
+Equation \eqref{phi-u} can be obtained by multiplying Equation \eqref{xs_int} by Equation \eqref{q_int} at $t=t^n$, which concludes the proof.
 \end{proof}
 
 \end{linenumbers}
